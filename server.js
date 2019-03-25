@@ -6,8 +6,6 @@ const SpotifyStrategy = require('passport-spotify').Strategy
 const bodyParser = require('body-parser')
 const isProd = process.env.NODE_ENV === 'production'
 const cookie = require('cookie')
-const Spotify = require('spotify-web-api-js')
-const spotify = new Spotify()
 
 let settings
 if (isProd) {
@@ -16,6 +14,14 @@ if (isProd) {
   settings = require('./server/config')
 }
 const host = process.env.HOST || 'http://localhost:8080'
+
+// Set up Spotify api
+const SpotifyWebApi = require('spotify-web-api-node')
+const spotifyApi = new SpotifyWebApi({
+  clientId: settings.spotify.clientId,
+  clientSecret: settings.spotify.secret,
+  scope: settings.spotify.scopedSlots
+})
 
 // Set up Mongo.
 const mongoose = require('mongoose')
@@ -96,12 +102,19 @@ server.get('/api/getCurrentSong', (req, res) => {
   const token = cookie.parse(req.headers.cookie)
   if (token['user.token']) {
     const accessToken = token['user.token']
-    spotify.setAccessToken(accessToken)
-    spotify.setPromiseImplementation(Promise)
+    console.log('making request with token ', accessToken)
 
-    // res.status(200).send({ token: token['user.token'] })
+    spotifyApi.setAccessToken(accessToken)
+    spotifyApi.getMyCurrentPlaybackState({})
+      .then(track => {
+        console.log(track)
+        res.status(200).send({ track: track })
+      })
+      .catch(err => {
+        res.status(500).json({ err })
+      })
   } else {
-    res.status(500)
+    res.status(500).send({ error: 'No access token' })
   }
 })
 

@@ -17,7 +17,7 @@
     "mongoose": "^5.4.19",
     "passport": "^0.4.0",
     "passport-spotify": "^1.0.1",
-    "spotify-web-api-js": "^1.2.0",
+    "spotify-web-api-node": "^4.0.0",
     "vue": "^2.6.6",
     "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",
