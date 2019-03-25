@@ -8,14 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
-    "cookie-parser": "^1.4.4",
+    "cookie": "^0.3.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.4.19",
     "passport": "^0.4.0",
     "passport-spotify": "^1.0.1",
+    "spotify-web-api-js": "^1.2.0",
     "vue": "^2.6.6",
     "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",

@@ -5,6 +5,9 @@ const passport = require('passport')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const bodyParser = require('body-parser')
 const isProd = process.env.NODE_ENV === 'production'
+const cookie = require('cookie')
+const Spotify = require('spotify-web-api-js')
+const spotify = new Spotify()
 
 let settings
 if (isProd) {
@@ -83,6 +86,26 @@ passport.deserializeUser(function (user, done) {
 
 // Set up routes which are caught from the requests/callback at Login.vue and after
 // signing into spotify.
+
+// Spotify / musixmatch stuff.
+server.get('/api/searchLyrics', (req, res) => {
+
+})
+
+server.get('/api/getCurrentSong', (req, res) => {
+  const token = cookie.parse(req.headers.cookie)
+  if (token['user.token']) {
+    const accessToken = token['user.token']
+    spotify.setAccessToken(accessToken)
+    spotify.setPromiseImplementation(Promise)
+
+    // res.status(200).send({ token: token['user.token'] })
+  } else {
+    res.status(500)
+  }
+})
+
+// Authentication / Logout
 server.get('/auth/spotify', passport.authenticate('spotify'))
 server.get('/auth/callback', passport.authenticate('spotify', {
   failureRedirect: '/'
