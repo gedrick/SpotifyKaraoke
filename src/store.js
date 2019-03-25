@@ -3,14 +3,26 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
-
+const state = {
+  user: {
+    token: null
   },
-  mutations: {
+  song: {}
+}
 
+const mutations = {
+  setUser (state, token) {
+    Vue.set(state.user, 'token', token)
   },
-  actions: {
-
+  setSong (state, user) {
+    Vue.set(state, 'user', user)
   }
+}
+
+const actions = {}
+
+export default new Vuex.Store({
+  state,
+  mutations,
+  actions
 })

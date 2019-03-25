@@ -10,12 +10,14 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.4.19",
     "passport": "^0.4.0",
     "passport-spotify": "^1.0.1",
     "vue": "^2.6.6",
+    "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -56,9 +58,7 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
+  "gitHooks": {},
   "lint-staged": {
     "*.{js,vue}": [
       "vue-cli-service lint",

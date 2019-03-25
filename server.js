@@ -4,7 +4,6 @@ const MongoStore = require('connect-mongo')(session)
 const passport = require('passport')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const bodyParser = require('body-parser')
-
 const isProd = process.env.NODE_ENV === 'production'
 
 let settings
@@ -79,14 +78,6 @@ passport.serializeUser(function (user, done) {
  */
 passport.deserializeUser(function (user, done) {
   // // Retrieve user by stored user id.
-  // User.findById(id, (err, user) => {
-  //   if (err) {
-  //     console.log('deserializeUser error:', err)
-  //   }
-  //   done(null, user)
-  // })
-  console.log(user)
-
   done(null, user)
 })
 
@@ -96,6 +87,7 @@ server.get('/auth/spotify', passport.authenticate('spotify'))
 server.get('/auth/callback', passport.authenticate('spotify', {
   failureRedirect: '/'
 }), (req, res) => {
+  res.cookie('user.token', req.user.accessToken, { maxAge: 900000, httpOnly: false })
   res.redirect(`${host}/`)
 })
 server.get('/logout', (req, res) => {
