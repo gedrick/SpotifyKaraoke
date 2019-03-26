@@ -5,7 +5,6 @@ const passport = require('passport')
 const SpotifyStrategy = require('passport-spotify').Strategy
 const bodyParser = require('body-parser')
 const isProd = process.env.NODE_ENV === 'production'
-const cookie = require('cookie')
 
 let settings
 if (isProd) {
@@ -20,7 +19,7 @@ const SpotifyWebApi = require('spotify-web-api-node')
 const spotifyApi = new SpotifyWebApi({
   clientId: settings.spotify.clientId,
   clientSecret: settings.spotify.secret,
-  scope: settings.spotify.scopedSlots
+  scope: settings.spotify.scopes
 })
 
 // Set up Mongo.
@@ -99,22 +98,16 @@ server.get('/api/searchLyrics', (req, res) => {
 })
 
 server.get('/api/getCurrentSong', (req, res) => {
-  const token = cookie.parse(req.headers.cookie)
-  if (token['user.token']) {
-    const accessToken = token['user.token']
-    console.log('making request with token ', accessToken)
-
-    spotifyApi.setAccessToken(accessToken)
-    spotifyApi.getMyCurrentPlaybackState({})
-      .then(track => {
-        console.log(track)
-        res.status(200).send({ track: track })
+  if (req.session.passport.user) {
+    spotifyApi.getMyCurrentPlayingTrack({})
+      .then(result => {
+        res.status(200).send({ result })
       })
       .catch(err => {
-        res.status(500).json({ err })
+        res.status(200).send({ err })
       })
   } else {
-    res.status(500).send({ error: 'No access token' })
+    res.status(200).send({ error: 'No access token' })
   }
 })
 
@@ -123,7 +116,12 @@ server.get('/auth/spotify', passport.authenticate('spotify'))
 server.get('/auth/callback', passport.authenticate('spotify', {
   failureRedirect: '/'
 }), (req, res) => {
+  spotifyApi.setAccessToken(req.user.accessToken)
+  spotifyApi.setRefreshToken(req.user.refreshToken)
+
   res.cookie('user.token', req.user.accessToken, { maxAge: 900000, httpOnly: false })
+  res.cookie('user.refresh', req.user.refreshToken, { maxAge: 900000, httpOnly: false })
+
   res.redirect(`${host}/`)
 })
 server.get('/logout', (req, res) => {
