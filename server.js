@@ -99,6 +99,9 @@ server.get('/api/searchLyrics', (req, res) => {
 
 server.get('/api/getCurrentSong', (req, res) => {
   if (req.session.passport.user) {
+    spotifyApi.setAccessToken(req.user.accessToken)
+    spotifyApi.setRefreshToken(req.user.refreshToken)
+
     spotifyApi.getMyCurrentPlayingTrack({})
       .then(result => {
         res.status(200).send({ result })
@@ -116,12 +119,8 @@ server.get('/auth/spotify', passport.authenticate('spotify'))
 server.get('/auth/callback', passport.authenticate('spotify', {
   failureRedirect: '/'
 }), (req, res) => {
-  spotifyApi.setAccessToken(req.user.accessToken)
-  spotifyApi.setRefreshToken(req.user.refreshToken)
-
   res.cookie('user.token', req.user.accessToken, { maxAge: 900000, httpOnly: false })
   res.cookie('user.refresh', req.user.refreshToken, { maxAge: 900000, httpOnly: false })
-
   res.redirect(`${host}/`)
 })
 server.get('/logout', (req, res) => {

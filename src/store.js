@@ -10,10 +10,10 @@ const state = {
 }
 
 const mutations = {
-  setSong (state, user) {
-    Vue.set(state, 'user', user)
+  setSong (state, { song }) {
+    Vue.set(state, 'song', song)
   },
-  setLyrics (state, lyrics) {
+  setLyrics (state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics)
   }
 }
@@ -21,8 +21,24 @@ const mutations = {
 const actions = {
   getCurrentSong ({ commit }) {
     return axios.get('/api/getCurrentSong')
-      .then(song => {
-        console.log('song recevied:', song)
+      .then(data => {
+        const result = data.data.result.body
+        let songData
+        if (result.is_playing) {
+          songData = {
+            album: result.item.album.name,
+            artist: result.item.artists[0].name,
+            trackName: result.item.name,
+            progress: result.progress_ms,
+            duration: result.item.duration_ms,
+            isPlaying: true
+          }
+        } else {
+          songData = {
+            isPlaying: false
+          }
+        }
+        commit('setSong', { song: songData })
       })
   },
   getLyrics ({ commit }, title) {

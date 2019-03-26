@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png"><br>
     <a v-if="!token" href="/auth/spotify">Sign in With Spotify</a>
     <div v-if="token">Welcome back!</div>
     <Karaoke v-if="token"/>
