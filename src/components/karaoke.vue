@@ -2,6 +2,7 @@
   <div class="kararoke" v-if="song && song.isPlaying">
     Karaoke!
     <div v-if="song">{{song.artist}} - {{song.trackName}} <span>{{song.progress}}</span></div>
+    <button @click="getLyrics">Get Lyrics</button>
   </div>
 </template>
 
@@ -28,6 +29,11 @@ export default {
     },
     sendQuery () {
       this.$store.dispatch('getCurrentSong')
+    },
+    getLyrics () {
+      this.$store.dispatch('getLyrics', {
+        query: `${this.song.artist} ${this.song.trackName}`
+      })
     }
   }
 }

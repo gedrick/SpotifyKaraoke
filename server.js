@@ -93,27 +93,22 @@ passport.deserializeUser(function (user, done) {
 // signing into spotify.
 
 // Spotify / musixmatch stuff.
-const Musixmatch = require('musixmatch-node')
-const mxm = new Musixmatch(settings.musixmatch.key)
+const Lyricist = require('lyricist')
+const lyricist = new Lyricist(settings.genius.token)
 server.get('/api/getLyrics', (req, res) => {
-  // q_track: req.query.trackName,
-  // q_artist: req.query.artist
-
-  mxm.searchTrack({
-    q_track: 'jeremy',
-    q_artist: 'pearl jam',
-    f_has_subtitle: 1
-  })
-    .then(result => {
-      const trackId = result.message.body.track_list[0].track.commontrack_id
-      console.log(`getTrackSubtitle for track ID: ${trackId}`)
-      return mxm.getTrackSubtitle({ commontrack_id: trackId })
+  lyricist.search(req.query.query)
+    .then(results => {
+      const trackId = results[0].id
+      return lyricist.song(trackId, { fetchLyrics: true, textFormat: 'html' })
     })
-    .then((subtitle) => {
-      res.status(200).send({ subtitle })
+    .then(song => {
+      res.status(200).json({
+        album: song.album,
+        lyrics: song.lyrics
+      })
     })
     .catch(error => {
-      console.log('error querying musixmatch:', { error })
+      res.status(500).json({ error })
     })
 })
 

@@ -6,15 +6,17 @@ Vue.use(Vuex)
 
 const state = {
   song: null,
-  lyrics: null
+  lyrics: null,
+  album: null
 }
 
 const mutations = {
   setSong (state, { song }) {
     Vue.set(state, 'song', song)
   },
-  setLyrics (state, { lyrics }) {
+  setLyrics (state, { lyrics, album }) {
     Vue.set(state, 'lyrics', lyrics)
+    Vue.set(state, 'album', album)
   }
 }
 
@@ -41,12 +43,20 @@ const actions = {
         commit('setSong', { song: songData })
       })
   },
-  getLyrics ({ commit }, title) {
-    return axios.get('/api/getLyrics', {
-      title
-    }).then(lyrics => {
-      console.log('got lyrics:', lyrics)
-    })
+  getLyrics ({ commit }, { query }) {
+    console.log('getLyrics', query)
+    return axios.get(`/api/getLyrics?query=${query}`)
+      .then(trackData => {
+        const data = trackData.data
+        const album = data.album
+        const lyrics = data.lyrics
+        console.log('got lyrics:', data)
+
+        commit('setLyrics', {
+          album,
+          lyrics
+        })
+      })
   }
 }
 
