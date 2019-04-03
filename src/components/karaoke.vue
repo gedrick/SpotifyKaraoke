@@ -3,6 +3,7 @@
     Karaoke!
     <div v-if="song">{{song.artist}} - {{song.trackName}} <span>{{song.progress}}</span></div>
     <button @click="getLyrics">Get Lyrics</button>
+    <div v-html="lyrics"></div>
   </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['song'])
+    ...mapState(['song', 'lyrics'])
   },
   mounted () {
     this.startQueryInterval()

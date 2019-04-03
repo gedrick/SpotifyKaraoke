@@ -102,6 +102,7 @@ server.get('/api/getLyrics', (req, res) => {
       return lyricist.song(trackId, { fetchLyrics: true, textFormat: 'html' })
     })
     .then(song => {
+      console.log('Found song results')
       res.status(200).json({
         album: song.album,
         lyrics: song.lyrics

@@ -57,6 +57,9 @@ const actions = {
           lyrics
         })
       })
+      .catch(error => {
+        console.log('something broke!', error)
+      })
   }
 }
 
