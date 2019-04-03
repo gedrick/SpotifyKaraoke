@@ -1,7 +1,7 @@
 <template>
   <div class="kararoke" v-if="song && song.isPlaying">
     Karaoke!
-    <div v-if="song">{{song}}</div>
+    <div v-if="song">{{song.artist}} - {{song.trackName}} <span>{{song.progress}}</span></div>
   </div>
 </template>
 
