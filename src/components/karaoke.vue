@@ -2,8 +2,8 @@
   <div class="kararoke" v-if="song && song.isPlaying">
     Karaoke!
     <div v-if="song">{{song.artist}} - {{song.trackName}} <span>{{song.progress}}</span></div>
-    <button @click="getLyrics">Get Lyrics</button>
-    <div v-html="lyrics"></div>
+    <!-- <button @click="getLyrics">Get Lyrics</button> -->
+    <div v-html="parsedLyrics"></div>
   </div>
 </template>
 
@@ -15,26 +15,45 @@ export default {
   data () {
     return {
       queryInterval: null,
-      queryTimeout: 3000
+      queryTimeout: 3000,
+
+      artist: null,
+      trackName: null
     }
   },
   computed: {
-    ...mapState(['song', 'lyrics'])
+    ...mapState(['song', 'lyrics']),
+    parsedLyrics () {
+      if (this.lyrics) {
+        return this.lyrics.replace(/\n/g, '<br><br>')
+      }
+    }
+  },
+  beforeMount() {
+    this.checkTrack();
   },
   mounted () {
-    this.startQueryInterval()
+    this.queryInterval = setInterval(() => {
+      this.checkTrack();
+    }, 3000);
   },
   methods: {
-    startQueryInterval () {
-      this.queryInterval = setInterval(this.sendQuery, this.queryTimeout)
-    },
-    sendQuery () {
+    checkTrack() {
       this.$store.dispatch('getCurrentSong')
-    },
-    getLyrics () {
-      this.$store.dispatch('getLyrics', {
-        query: `${this.song.artist} ${this.song.trackName}`
-      })
+    }
+  },
+  watch: {
+    song: function (value) {
+      if (value.artist && value.trackName
+          && value.artist !== this.artist
+          && value.trackName !== this.trackName) {
+        this.artist = value.artist
+        this.trackName = value.trackName
+
+        this.$store.dispatch('getLyrics', {
+          query: `${this.song.artist} ${this.song.trackName}`
+        })
+      }
     }
   }
 }
