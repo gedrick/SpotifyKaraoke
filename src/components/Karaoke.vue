@@ -1,8 +1,6 @@
 <template>
   <div class="kararoke" v-if="song && song.isPlaying">
-    Karaoke!
     <div v-if="song">{{song.artist}} - {{song.trackName}} <span>{{song.progress}}</span></div>
-    <!-- <button @click="getLyrics">Get Lyrics</button> -->
     <div v-html="parsedLyrics"></div>
   </div>
 </template>
