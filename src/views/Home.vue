@@ -4,18 +4,21 @@
       <a v-if="!token" href="/auth/spotify">Sign in With Spotify</a>
     </div>
 
-    <div class="home__not-listening" v-if="token && (!song || !song.isPlaying)">
+    <div class="home__not-listening" v-if="token && song && !song.isPlaying">
       You're signed in, but not listening to anything.<br>
       <a href="/logout">Logout</a>
+    </div>
+
+    <div class="home__status" v-if="checkStep === 1">
+      Fetching your current song...
+    </div>
+    <div class="home__status" v-if="checkStep === 2 && !lyrics">
+      Fetching lyrics...
     </div>
 
     <div v-if="song && song.isPlaying">
       <Karaoke/>
       <ProgressBar/>
-    </div>
-
-    <div class="home__logout">
-
     </div>
   </div>
 </template>
@@ -33,13 +36,15 @@ export default {
   },
   data () {
     return {
-      token: null,
+      queryInterval: null,
+      queryTimeout: 3000,
 
-      queryInterval: 2000
+      token: null,
+      checkStep: 0
     }
   },
   computed: {
-    ...mapState(['song'])
+    ...mapState(['song', 'lyrics'])
   },
   methods: {
     ...mapMutations(['setUser']),
@@ -53,16 +58,20 @@ export default {
   mounted () {
     this.token = this.$cookies.get('user.token')
     if (this.token) {
+      this.checkStep = 1
       this.queryInterval = setInterval(() => {
         this.checkTrack()
-      }, this.queryInterval)
+      }, 2000)
     }
   },
   watch: {
     song: function (value) {
-      if (value.artist && value.trackName &&
+      if (value && value.artist && value.trackName &&
           value.artist !== this.artist &&
           value.trackName !== this.trackName) {
+        console.log('found new track playing')
+        this.checkStep = 2
+
         this.artist = value.artist
         this.trackName = value.trackName
 
@@ -71,7 +80,6 @@ export default {
           query: `${this.song.artist} ${this.song.trackName}`
         }).then(() => {
           this.isLoading = false
-          this.queryInterval = 5000
         })
       }
     }
@@ -95,7 +103,11 @@ export default {
   &__logout {
     position: fixed;
     bottom: 0;
+  }
 
+  &__status {
+    font-size: 48px;
+    color: #ffffff;
   }
 }
 </style>

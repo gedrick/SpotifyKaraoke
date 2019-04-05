@@ -1,9 +1,10 @@
 <template>
   <div class="kararoke" v-if="song && song.isPlaying">
-    <div class="karaoke__loading" v-if="isLoading">
-      Fetching lyrics...
+    <div
+      class="karaoke__lyrics"
+      v-html="parsedLyrics"
+      v-if="lyrics">
     </div>
-    <div class="karaoke__lyrics" v-html="parsedLyrics" v-if="!isLoading"></div>
   </div>
 </template>
 
@@ -14,13 +15,8 @@ export default {
   name: 'Karaoke',
   data () {
     return {
-      queryInterval: null,
-      queryTimeout: 3000,
-
       artist: null,
-      trackName: null,
-
-      isLoading: true
+      trackName: null
     }
   },
   computed: {
@@ -29,18 +25,8 @@ export default {
       if (this.lyrics) {
         return this.lyrics.replace(/\n/g, '<br><br>')
       }
-      return ''
+      return false
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.karaoke {
-
-  &__loading {
-    font-size: 48px;
-    color: #ffffff;
-  }
-}
-</style>

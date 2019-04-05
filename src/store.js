@@ -6,17 +6,15 @@ Vue.use(Vuex)
 
 const state = {
   song: null,
-  lyrics: null,
-  album: null
+  lyrics: null
 }
 
 const mutations = {
   setSong (state, { song }) {
     Vue.set(state, 'song', song)
   },
-  setLyrics (state, { lyrics, album }) {
+  setLyrics (state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics)
-    Vue.set(state, 'album', album)
   }
 }
 
@@ -24,9 +22,8 @@ const actions = {
   getCurrentSong ({ commit }) {
     return axios.get('/api/getCurrentSong')
       .then(data => {
-        console.log('got result', data)
         if (!data.data.result) {
-          throw new Error();
+          throw new Error()
         }
 
         const result = data.data.result.body
@@ -46,25 +43,30 @@ const actions = {
         commit('setSong', { song: songData })
       })
       .catch(() => {
-        commit('setSong', { song: null })
+        commit('setSong', { song: {
+          isPlaying: false
+        }})
       })
   },
   getLyrics ({ commit }, { query }) {
-    console.log('getLyrics', query)
     return axios.get(`/api/getLyrics?query=${query}`)
       .then(trackData => {
         const data = trackData.data
-        const album = data.album
+        // const album = data.album
         const lyrics = data.lyrics
-        console.log('got lyrics:', data)
+
+        if (!lyrics) {
+          throw new Error()
+        }
 
         commit('setLyrics', {
-          album,
           lyrics
         })
       })
-      .catch(error => {
-        console.log('something broke!', error)
+      .catch(() => {
+        commit('setLyrics', {
+          lyrics: null
+        })
       })
   }
 }
