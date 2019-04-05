@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar">
+  <div class="progress-bar" v-if="song && song.isPlaying">
     <div class="progress-bar__title">{{ title }}</div>
     <div class="progress-bar__progress" :style="{ width: progress + '%'}">
       &nbsp;
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   computed: {
@@ -25,7 +25,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss">
 .progress-bar {

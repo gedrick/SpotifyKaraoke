@@ -102,7 +102,6 @@ server.get('/api/getLyrics', (req, res) => {
       return lyricist.song(trackId, { fetchLyrics: true, textFormat: 'html' })
     })
     .then(song => {
-      console.log('Found song results')
       res.status(200).json({
         album: song.album,
         lyrics: song.lyrics
@@ -114,7 +113,7 @@ server.get('/api/getLyrics', (req, res) => {
 })
 
 server.get('/api/getCurrentSong', (req, res) => {
-  if (req.session.passport.user) {
+  if (req.session.passport && req.session.passport.user) {
     spotifyApi.setAccessToken(req.user.accessToken)
     spotifyApi.setRefreshToken(req.user.refreshToken)
 
@@ -141,6 +140,8 @@ server.get('/auth/callback', passport.authenticate('spotify', {
 })
 server.get('/logout', (req, res) => {
   req.logout()
+  res.clearCookie('user.token')
+  res.clearCookie('user.refresh')
   res.redirect(`${host}/#/`)
 })
 

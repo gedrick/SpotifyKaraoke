@@ -24,6 +24,11 @@ const actions = {
   getCurrentSong ({ commit }) {
     return axios.get('/api/getCurrentSong')
       .then(data => {
+        console.log('got result', data)
+        if (!data.data.result) {
+          throw new Error();
+        }
+
         const result = data.data.result.body
         let songData
         if (result.is_playing) {
@@ -36,11 +41,12 @@ const actions = {
             isPlaying: true
           }
         } else {
-          songData = {
-            isPlaying: false
-          }
+          songData = null
         }
         commit('setSong', { song: songData })
+      })
+      .catch(() => {
+        commit('setSong', { song: null })
       })
   },
   getLyrics ({ commit }, { query }) {
