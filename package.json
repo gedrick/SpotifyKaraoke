@@ -14,7 +14,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "lyricist": "^2.2.2",
-    "mongoose": "^5.4.19",
+    "mongoose": "^5.7.5",
     "musixmatch-node": "^1.0.2",
     "passport": "^0.4.0",
     "passport-spotify": "^1.0.1",
