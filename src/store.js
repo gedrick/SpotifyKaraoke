@@ -45,7 +45,7 @@ const actions = {
       .catch(() => {
         commit('setSong', { song: {
           isPlaying: false
-        }})
+        } })
       })
   },
   getLyrics ({ commit }, { query }) {

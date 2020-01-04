@@ -66,6 +66,10 @@ export default {
   },
   watch: {
     song: function (value) {
+      console.log(value)
+      console.log(this.artist, this.trackName);
+
+
       if (value && value.artist && value.trackName &&
           value.artist !== this.artist &&
           value.trackName !== this.trackName) {
@@ -79,7 +83,7 @@ export default {
         this.$store.dispatch('getLyrics', {
           query: `${this.song.artist} ${this.song.trackName}`
         }).then(() => {
-          this.isLoading = false
+          this.checkStep = 0
         })
       }
     }
