@@ -9,24 +9,24 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {mapState} from 'vuex';
 
 export default {
   name: 'Karaoke',
-  data () {
+  data() {
     return {
       artist: null,
-      trackName: null
-    }
+      trackName: null,
+    };
   },
   computed: {
     ...mapState(['song', 'lyrics']),
-    parsedLyrics () {
+    parsedLyrics() {
       if (this.lyrics) {
-        return this.lyrics.replace(/\n/g, '<br><br>')
+        return this.lyrics.replace(/\n/g, '<br><br>');
       }
-      return false
-    }
-  }
-}
+      return false;
+    },
+  },
+};
 </script>

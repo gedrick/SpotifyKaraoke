@@ -8,22 +8,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {mapState} from 'vuex';
 
 export default {
   computed: {
     ...mapState(['song']),
-    progress () {
-      const progress = this.song.progress
-      const duration = this.song.duration
-      const percentage = (progress / duration) * 100
-      return Math.round(percentage)
+    progress() {
+      const progress = this.song.progress;
+      const duration = this.song.duration;
+      const percentage = (progress / duration) * 100;
+      return Math.round(percentage);
     },
-    title () {
-      return `${this.song.artist} - ${this.song.trackName}`
-    }
-  }
-}
+    title() {
+      return `${this.song.artist} - ${this.song.trackName}`;
+    },
+  },
+};
 </script>
 
 <style lang="scss">
