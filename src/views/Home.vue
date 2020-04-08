@@ -1,17 +1,16 @@
 <template>
   <div class="home">
     <SignIn v-if="!token" />
-    <div class="home__not-listening" v-if="token">
-      You're signed in, but not listening to anything.<br />
+    <div class="home__logout" v-if="token">
       <a href="/logout">Logout</a>
     </div>
 
-    <div class="home__status" v-if="checkStep === 1 && !song">
-      Fetching your current song...
-    </div>
-    <div class="home__status" v-if="checkStep === 2 && !lyrics && isLoading">
-      Fetching lyrics...
-    </div>
+    <div
+      v-if="!song && notListening"
+      class="home__not-listening"
+    >You're signed in, but not listening to anything.</div>
+
+    <div class="home__status" v-if="fetchingLyrics">Fetching lyrics...</div>
 
     <div v-if="song && song.isPlaying">
       <Karaoke />
@@ -38,8 +37,11 @@ export default {
       queryInterval: null,
       queryTimeout: 3000,
 
-      token: null,
-      checkStep: 0
+      notListening: true,
+      fetchingSong: false,
+      fetchingLyrics: false,
+
+      token: null
     };
   },
   computed: {
@@ -64,28 +66,35 @@ export default {
     }
   },
   watch: {
-    song: function(value) {
-      if (
-        value &&
-        value.artist &&
-        value.trackName &&
-        value.artist !== this.artist &&
-        value.trackName !== this.trackName
-      ) {
-        console.log('found new track playing');
-        this.checkStep = 2;
+    song: {
+      immediate: true,
+      handler: function(value) {
+        if (!value) {
+          console.log('no song is currently playing');
+          this.notListening = true;
+          this.fetchingSong = false;
+          this.fetchingLyrics = false;
+        } else if (
+          value.artist &&
+          value.trackName &&
+          value.artist !== this.artist &&
+          value.trackName !== this.trackName
+        ) {
+          console.log('found new track playing');
+          this.notListening = false;
 
-        this.artist = value.artist;
-        this.trackName = value.trackName;
+          this.artist = value.artist;
+          this.trackName = value.trackName;
 
-        this.isLoading = true;
-        this.$store
-          .dispatch('getLyrics', {
-            query: `${this.song.artist} ${this.song.trackName}`
-          })
-          .then(() => {
-            this.checkStep = 0;
-          });
+          this.fetchingLyrics = true;
+          this.$store
+            .dispatch('getLyrics', {
+              query: `${this.song.artist} ${this.song.trackName}`
+            })
+            .then(() => {
+              this.fetchingLyrics = false;
+            });
+        }
       }
     }
   }
@@ -100,6 +109,16 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__logout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 8px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+  }
 
   &__not-listening {
     font-size: 28px;

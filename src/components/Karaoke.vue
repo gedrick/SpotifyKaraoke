@@ -9,14 +9,14 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Karaoke',
   data() {
     return {
       artist: null,
-      trackName: null,
+      trackName: null
     };
   },
   computed: {
@@ -26,7 +26,17 @@ export default {
         return this.lyrics.replace(/\n/g, '<br><br>');
       }
       return false;
-    },
-  },
+    }
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+.karaoke {
+  overflow-y: scroll;
+    height: calc(100% - 30px);
+  &__lyrics {
+    overflow-y: scroll;
+  }
+}
+</style>
