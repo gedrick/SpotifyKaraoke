@@ -19,7 +19,7 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
   clientId: settings.spotify.clientId,
   clientSecret: settings.spotify.secret,
-  scope: settings.spotify.scopes,
+  scope: settings.spotify.scopes
 });
 
 /**
@@ -31,9 +31,9 @@ const server = express();
 server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(
-    bodyParser.urlencoded({
-      extended: true,
-    }),
+  bodyParser.urlencoded({
+    extended: true
+  })
 );
 
 if (isProd) {
@@ -50,22 +50,22 @@ server.use(passport.session());
  * Go here to find one for the service you want: http://www.passportjs.org/packages/
  */
 passport.use(
-    new SpotifyStrategy(
-        {
-          clientID: settings.spotify.clientId,
-          clientSecret: settings.spotify.secret,
-          callbackURL: settings.login.callback,
-          scope: settings.spotify.scopes,
-        },
-        (accessToken, refreshToken, profile, done) => {
-          const profileData = {
-            accessToken,
-            refreshToken,
-            profile,
-          };
-          return done(null, profileData);
-        },
-    ),
+  new SpotifyStrategy(
+    {
+      clientID: settings.spotify.clientId,
+      clientSecret: settings.spotify.secret,
+      callbackURL: settings.login.callback,
+      scope: settings.spotify.scopes
+    },
+    (accessToken, refreshToken, profile, done) => {
+      const profileData = {
+        accessToken,
+        refreshToken,
+        profile
+      };
+      return done(null, profileData);
+    }
+  )
 );
 
 /**
@@ -97,20 +97,20 @@ const Lyricist = require('lyricist');
 const lyricist = new Lyricist(settings.genius.token);
 server.get('/api/getLyrics', (req, res) => {
   lyricist
-      .search(req.query.query)
-      .then((results) => {
-        const trackId = results[0].id;
-        return lyricist.song(trackId, {fetchLyrics: true, textFormat: 'html'});
-      })
-      .then((song) => {
-        res.status(200).json({
-          album: song.album,
-          lyrics: song.lyrics,
-        });
-      })
-      .catch((error) => {
-        res.status(500).json({error});
+    .search(req.query.query)
+    .then((results) => {
+      const trackId = results[0].id;
+      return lyricist.song(trackId, {fetchLyrics: true, textFormat: 'html'});
+    })
+    .then((song) => {
+      res.status(200).json({
+        album: song.album,
+        lyrics: song.lyrics
       });
+    })
+    .catch((error) => {
+      res.status(500).json({error});
+    });
 });
 
 server.get('/api/getCurrentSong', (req, res) => {
@@ -123,13 +123,13 @@ server.get('/api/getCurrentSong', (req, res) => {
     spotifyApi.setRefreshToken(refresh);
 
     spotifyApi
-        .getMyCurrentPlayingTrack({})
-        .then((result) => {
-          res.status(200).send({result});
-        })
-        .catch((err) => {
-          res.status(200).send({err});
-        });
+      .getMyCurrentPlayingTrack({})
+      .then((result) => {
+        res.status(200).send({result});
+      })
+      .catch((err) => {
+        res.status(200).send({err});
+      });
   } else {
     res.status(200).send({error: 'No access token'});
   }
@@ -138,21 +138,21 @@ server.get('/api/getCurrentSong', (req, res) => {
 // Authentication / Logout
 server.get('/auth/spotify', passport.authenticate('spotify'));
 server.get(
-    '/auth/callback',
-    passport.authenticate('spotify', {
-      failureRedirect: '/',
-    }),
-    (req, res) => {
-      res.cookie('user.token', req.user.accessToken, {
-        maxAge: 900000,
-        httpOnly: false,
-      });
-      res.cookie('user.refresh', req.user.refreshToken, {
-        maxAge: 900000,
-        httpOnly: false,
-      });
-      res.redirect(`${host}/`);
-    },
+  '/auth/callback',
+  passport.authenticate('spotify', {
+    failureRedirect: '/'
+  }),
+  (req, res) => {
+    res.cookie('user.token', req.user.accessToken, {
+      maxAge: 900000,
+      httpOnly: false
+    });
+    res.cookie('user.refresh', req.user.refreshToken, {
+      maxAge: 900000,
+      httpOnly: false
+    });
+    res.redirect(`${host}/`);
+  }
 );
 
 server.get('/logout', (req, res) => {

@@ -1,6 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -10,19 +10,19 @@ const state = {
 };
 
 const mutations = {
-  setSong(state, { song }) {
-    Vue.set(state, "song", song);
+  setSong(state, {song}) {
+    Vue.set(state, 'song', song);
   },
-  setLyrics(state, { lyrics }) {
-    Vue.set(state, "lyrics", lyrics);
+  setLyrics(state, {lyrics}) {
+    Vue.set(state, 'lyrics', lyrics);
   }
 };
 
 const actions = {
-  getCurrentSong({ commit }) {
+  getCurrentSong({commit}) {
     return axios
-      .get("/api/getCurrentSong")
-      .then(data => {
+      .get('/api/getCurrentSong')
+      .then((data) => {
         if (!data.data.result) {
           throw new Error();
         }
@@ -41,23 +41,23 @@ const actions = {
         } else {
           songData = null;
         }
-        commit("setSong", { song: songData });
+        commit('setSong', {song: songData});
       })
       .catch(() => {
-        commit("setSong", {
+        commit('setSong', {
           song: {
             isPlaying: false
           }
         });
       });
   },
-  getLyrics({ commit }, { query }) {
-    commit("setLyrics", {
-      lyrics: ""
+  getLyrics({commit}, {query}) {
+    commit('setLyrics', {
+      lyrics: ''
     });
     return axios
       .get(`/api/getLyrics?query=${query}`)
-      .then(trackData => {
+      .then((trackData) => {
         const data = trackData.data;
         // const album = data.album
         const lyrics = data.lyrics;
@@ -66,12 +66,12 @@ const actions = {
           throw new Error();
         }
 
-        commit("setLyrics", {
+        commit('setLyrics', {
           lyrics
         });
       })
       .catch(() => {
-        commit("setLyrics", {
+        commit('setLyrics', {
           lyrics: null
         });
       });

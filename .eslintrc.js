@@ -20,5 +20,9 @@ module.exports = {
     'vue',
   ],
   'rules': {
+    "comma-dangle": ["error", "never"],
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "semi-style": ["error", "last"],
   },
 };

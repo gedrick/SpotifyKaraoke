@@ -24,15 +24,15 @@
 </template>
 
 <script>
-import Karaoke from "@/components/Karaoke.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
-import { mapMutations, mapState } from "vuex";
+import Karaoke from '@/components/Karaoke.vue';
+import ProgressBar from '@/components/ProgressBar.vue';
+import {mapMutations, mapState} from 'vuex';
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     Karaoke,
-    ProgressBar
+    ProgressBar,
   },
   data() {
     return {
@@ -40,23 +40,23 @@ export default {
       queryTimeout: 3000,
 
       token: null,
-      checkStep: 0
+      checkStep: 0,
     };
   },
   computed: {
-    ...mapState(["song", "lyrics"])
+    ...mapState(['song', 'lyrics']),
   },
   methods: {
-    ...mapMutations(["setUser"]),
+    ...mapMutations(['setUser']),
     checkTrack() {
-      this.$store.dispatch("getCurrentSong");
-    }
+      this.$store.dispatch('getCurrentSong');
+    },
   },
   beforeMount() {
     this.checkTrack();
   },
   mounted() {
-    this.token = this.$cookies.get("user.token");
+    this.token = this.$cookies.get('user.token');
     if (this.token) {
       this.checkStep = 1;
       this.queryInterval = setInterval(() => {
@@ -73,7 +73,7 @@ export default {
         value.artist !== this.artist &&
         value.trackName !== this.trackName
       ) {
-        console.log("found new track playing");
+        console.log('found new track playing');
         this.checkStep = 2;
 
         this.artist = value.artist;
@@ -81,15 +81,15 @@ export default {
 
         this.isLoading = true;
         this.$store
-          .dispatch("getLyrics", {
-            query: `${this.song.artist} ${this.song.trackName}`
-          })
-          .then(() => {
-            this.checkStep = 0;
-          });
+            .dispatch('getLyrics', {
+              query: `${this.song.artist} ${this.song.trackName}`,
+            })
+            .then(() => {
+              this.checkStep = 0;
+            });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
