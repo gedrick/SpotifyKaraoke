@@ -4,91 +4,93 @@
       <a v-if="!token" href="/auth/spotify">Sign in With Spotify</a>
     </div>
 
-    <div class="home__not-listening" v-if="token && song && !song.isPlaying">
-      You're signed in, but not listening to anything.<br>
+    <div class="home__not-listening" v-if="token">
+      You're signed in, but not listening to anything.<br />
       <a href="/logout">Logout</a>
     </div>
 
-    <div class="home__status" v-if="checkStep === 1">
+    <div class="home__status" v-if="checkStep === 1 && !song">
       Fetching your current song...
     </div>
-    <div class="home__status" v-if="checkStep === 2 && !lyrics">
+    <div class="home__status" v-if="checkStep === 2 && !lyrics && isLoading">
       Fetching lyrics...
     </div>
 
     <div v-if="song && song.isPlaying">
-      <Karaoke/>
-      <ProgressBar/>
+      <Karaoke />
+      <ProgressBar />
     </div>
   </div>
 </template>
 
 <script>
-import Karaoke from '@/components/Karaoke.vue'
-import ProgressBar from '@/components/ProgressBar.vue'
-import { mapMutations, mapState } from 'vuex'
+import Karaoke from "@/components/Karaoke.vue";
+import ProgressBar from "@/components/ProgressBar.vue";
+import { mapMutations, mapState } from "vuex";
 
 export default {
-  name: 'home',
+  name: "home",
   components: {
     Karaoke,
     ProgressBar
   },
-  data () {
+  data() {
     return {
       queryInterval: null,
       queryTimeout: 3000,
 
       token: null,
       checkStep: 0
-    }
+    };
   },
   computed: {
-    ...mapState(['song', 'lyrics'])
+    ...mapState(["song", "lyrics"])
   },
   methods: {
-    ...mapMutations(['setUser']),
-    checkTrack () {
-      this.$store.dispatch('getCurrentSong')
+    ...mapMutations(["setUser"]),
+    checkTrack() {
+      this.$store.dispatch("getCurrentSong");
     }
   },
-  beforeMount () {
-    this.checkTrack()
+  beforeMount() {
+    this.checkTrack();
   },
-  mounted () {
-    this.token = this.$cookies.get('user.token')
+  mounted() {
+    this.token = this.$cookies.get("user.token");
     if (this.token) {
-      this.checkStep = 1
+      this.checkStep = 1;
       this.queryInterval = setInterval(() => {
-        this.checkTrack()
-      }, 2000)
+        this.checkTrack();
+      }, this.queryTimeout);
     }
   },
   watch: {
-    song: function (value) {
-      console.log(value)
-      console.log(this.artist, this.trackName);
+    song: function(value) {
+      if (
+        value &&
+        value.artist &&
+        value.trackName &&
+        value.artist !== this.artist &&
+        value.trackName !== this.trackName
+      ) {
+        console.log("found new track playing");
+        this.checkStep = 2;
 
+        this.artist = value.artist;
+        this.trackName = value.trackName;
 
-      if (value && value.artist && value.trackName &&
-          value.artist !== this.artist &&
-          value.trackName !== this.trackName) {
-        console.log('found new track playing')
-        this.checkStep = 2
-
-        this.artist = value.artist
-        this.trackName = value.trackName
-
-        this.isLoading = true
-        this.$store.dispatch('getLyrics', {
-          query: `${this.song.artist} ${this.song.trackName}`
-        }).then(() => {
-          this.checkStep = 0
-        })
+        this.isLoading = true;
+        this.$store
+          .dispatch("getLyrics", {
+            query: `${this.song.artist} ${this.song.trackName}`
+          })
+          .then(() => {
+            this.checkStep = 0;
+          });
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
