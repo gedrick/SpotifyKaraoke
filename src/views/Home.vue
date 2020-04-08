@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <div class="home__login">
-      <a v-if="!token" href="/auth/spotify">Sign in With Spotify</a>
-    </div>
-
+    <SignIn v-if="!token" />
     <div class="home__not-listening" v-if="token">
       You're signed in, but not listening to anything.<br />
       <a href="/logout">Logout</a>
@@ -25,13 +22,15 @@
 
 <script>
 import Karaoke from '@/components/Karaoke.vue';
+import SignIn from '@/components/SignIn.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
-import {mapMutations, mapState} from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'home',
   components: {
     Karaoke,
+    SignIn,
     ProgressBar
   },
   data() {

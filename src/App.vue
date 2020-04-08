@@ -19,8 +19,20 @@ body {
 }
 
 a {
-  color: #1DB954;
-  font-size: 28px;
+  color: #9a6dc3;
   text-decoration: none;
+}
+
+h1 {
+  font-family: 'Bungee';
+  font-size: 60px;
+  margin-bottom: 0;
+  color: #fff;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 5px 0 20px 0;
+  font-style: italic;
 }
 </style>
