@@ -1,8 +1,19 @@
 const spotify = {
-  clientId: '[yourClientId]',
-  secret: '[yourSecret]'
-}
+  clientId: "[your-spotify-app-clientid]",
+  secret: "[your-spotify-secret]",
+  scopes: ["user-read-playback-state"]
+};
 
-export default {
-  spotify
-}
+const login = {
+  callback: "http://localhost:3000/auth/callback"
+};
+
+const genius = {
+  token: "[your-genius-token]"
+};
+
+module.exports = {
+  spotify,
+  login,
+  genius
+};
