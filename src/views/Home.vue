@@ -32,7 +32,7 @@ export default {
   name: 'home',
   components: {
     Karaoke,
-    ProgressBar,
+    ProgressBar
   },
   data() {
     return {
@@ -40,17 +40,17 @@ export default {
       queryTimeout: 3000,
 
       token: null,
-      checkStep: 0,
+      checkStep: 0
     };
   },
   computed: {
-    ...mapState(['song', 'lyrics']),
+    ...mapState(['song', 'lyrics'])
   },
   methods: {
     ...mapMutations(['setUser']),
     checkTrack() {
       this.$store.dispatch('getCurrentSong');
-    },
+    }
   },
   beforeMount() {
     this.checkTrack();
@@ -81,15 +81,15 @@ export default {
 
         this.isLoading = true;
         this.$store
-            .dispatch('getLyrics', {
-              query: `${this.song.artist} ${this.song.trackName}`,
-            })
-            .then(() => {
-              this.checkStep = 0;
-            });
+          .dispatch('getLyrics', {
+            query: `${this.song.artist} ${this.song.trackName}`
+          })
+          .then(() => {
+            this.checkStep = 0;
+          });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
