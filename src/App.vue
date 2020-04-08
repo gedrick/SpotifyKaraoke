@@ -6,7 +6,7 @@
 
 <style lang="scss">
 body {
-  background-color: #2c3e50;
+  background-color: #1a1a1a;
   overflow: hidden;
 }
 
