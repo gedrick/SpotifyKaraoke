@@ -25,6 +25,6 @@ module.exports = {
     "semi": ["error", "always"],
     "semi-style": ["error", "last"],
     "object-curly-spacing": ["error", "always"],
-    max-len: ["error", { "ignoreUrls": true }]
+    "max-len": ["error", { "ignoreUrls": true }]
   },
 };
