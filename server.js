@@ -160,17 +160,17 @@ server.get(
 );
 
 server.get('/logout', (req, res) => {
+  console.log('Logging out user...');
   req.logout();
-  console.log('logging out user');
-
   res.clearCookie('loggedIn');
   res.clearCookie('user.token');
   res.clearCookie('user.refresh');
   res.redirect(`${host}/`);
 });
 
+
 // Start the server.
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
-  console.log(`server operating on port ${port}`);
+  console.log(`Server operating on port ${port}`);
 });
