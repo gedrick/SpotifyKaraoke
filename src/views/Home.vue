@@ -1,8 +1,7 @@
 <template>
   <div class="home">
-    <div class="home__logout">
-      <router-link to="/logout">Logout</router-link>
-    </div>
+
+<TopMenu />
     <div
       v-if="!song && notListening"
       class="home__not-listening"
@@ -21,6 +20,7 @@
 </template>
 
 <script>
+import TopMenu from '@/components/TopMenu.vue';
 import Karaoke from '@/components/Karaoke.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 import { mapMutations, mapState } from 'vuex';
@@ -28,6 +28,7 @@ import { mapMutations, mapState } from 'vuex';
 export default {
   name: 'home',
   components: {
+    TopMenu,
     Karaoke,
     ProgressBar
   },
@@ -125,17 +126,6 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-  }
-
-  &__logout {
-    z-index: 5;
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 8px;
-    font-weight: bold;
-    text-align: center;
-    color: $white;
   }
 
   &__not-listening {
