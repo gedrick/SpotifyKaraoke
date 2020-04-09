@@ -50,8 +50,13 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser']),
-    checkTrack() {
-      this.$store.dispatch('getCurrentSong');
+    async checkTrack() {
+      try {
+        await this.$store.dispatch('getCurrentSong');
+      } catch (err) {
+        // There is an error communicating with Spotify; force login.
+        document.location = '/logout';
+      }
     }
   },
   beforeMount() {
@@ -105,10 +110,10 @@ export default {
 .home {
   width: 100vw;
   height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
+
   &__lyrics {
     width: 100%;
     height: 100%;

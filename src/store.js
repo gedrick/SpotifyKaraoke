@@ -20,36 +20,40 @@ const mutations = {
 
 const actions = {
   getCurrentSong({ commit }) {
-    return axios
-      .get('/api/getCurrentSong')
-      .then((data) => {
-        if (!data.data.result) {
-          throw new Error();
-        }
-
-        const result = data.data.result.body;
-        let songData;
-        if (result.is_playing) {
-          songData = {
-            album: result.item.album.name,
-            artist: result.item.artists[0].name,
-            trackName: result.item.name,
-            progress: result.progress_ms,
-            duration: result.item.duration_ms,
-            isPlaying: true
-          };
-        } else {
-          songData = null;
-        }
-        commit('setSong', { song: songData });
-      })
-      .catch(() => {
-        commit('setSong', {
-          song: {
-            isPlaying: false
+    return new Promise((resolve, reject) => {
+      axios
+        .get('/api/getCurrentSong')
+        .then((response) => {
+          const data = response.data;
+          if (data.err) {
+            return reject(data.err);
           }
+
+          const result = data.result.body;
+          let songData;
+          if (result.is_playing) {
+            songData = {
+              album: result.item.album.name,
+              artist: result.item.artists[0].name,
+              trackName: result.item.name,
+              progress: result.progress_ms,
+              duration: result.item.duration_ms,
+              isPlaying: true
+            };
+          } else {
+            songData = null;
+          }
+          commit('setSong', { song: songData });
+          resolve();
+        })
+        .catch((err) => {
+          commit('setSong', {
+            song: {
+              isPlaying: false
+            }
+          });
         });
-      });
+    });
   },
   getLyrics({ commit }, { query }) {
     commit('setLyrics', {
