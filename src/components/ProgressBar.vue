@@ -38,7 +38,8 @@ export default {
   right: 0;
 
   width: 100%;
-  height: 30px;
+  height: 70px;
+  z-index: 4;
 
   display: flex;
   justify-content: flex-start;

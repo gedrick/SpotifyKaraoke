@@ -45,6 +45,7 @@ export default {
   }
 }
 .gradient {
+  z-index: 3;
   height: 20vh;
   width: 100%;
   background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
