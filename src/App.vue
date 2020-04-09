@@ -20,6 +20,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $white;
+  display: flex;
+  height: 100vh;
 }
 
 a, a:visited {

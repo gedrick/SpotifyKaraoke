@@ -1,20 +1,17 @@
 <template>
   <div class="home">
-
-<TopMenu />
+    <TopMenu />
     <div
       v-if="!song && notListening"
       class="home__not-listening"
-    >
-      You're signed in, but not listening to anything.
-    </div>
+    >You're signed in, but not listening to anything.</div>
     <div class="home__status" v-if="fetchingLyrics">
       Fetching lyrics...
-      <p>for <span>
-        {{ song.trackName }}
-      </span> by <span>
-        {{ song.artist}}
-      </span></p>
+      <p>
+        for
+        <span>{{ song.trackName }}</span> by
+        <span>{{ song.artist}}</span>
+      </p>
     </div>
     <div class="home__lyrics" v-if="!fetchingLyrics && song && song.isPlaying">
       <Karaoke />
@@ -122,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .home {
   width: 100vw;
