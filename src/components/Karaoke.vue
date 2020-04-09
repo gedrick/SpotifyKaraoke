@@ -36,6 +36,7 @@ export default {
   &__lyrics {
     font-size: 20px;
     padding: 20px;
+    margin-bottom: 30px;
 
     @media (min-width: 650px) {
       padding: 20px 0 30px 0;

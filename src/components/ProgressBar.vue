@@ -1,7 +1,11 @@
 <template>
   <div class="progress-bar" v-if="song && song.isPlaying">
     <div class="progress-bar__title">{{ title }}</div>
-    <div class="progress-bar__progress" :style="{ width: progress + '%'}">&nbsp;</div>
+    <div
+      class="progress-bar__progress"
+      :style="{ width: progress + '%'}">
+      &nbsp;
+    </div>
   </div>
 </template>
 

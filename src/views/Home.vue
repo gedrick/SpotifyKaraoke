@@ -53,17 +53,16 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser']),
-    async checkTrack() {
-      console.log('checkTrack');
-
+    checkTrack() {
       try {
-        await this.$store.dispatch('getCurrentSong');
+        this.$store.dispatch('getCurrentSong');
       } catch (err) {
         // There is an error communicating with Spotify; force login.
         window.location = '/logout';
       }
     },
-    startTimer(interval) {
+    startInterval(interval) {
+      window.clearInterval(this.queryTimer);
       this.queryTimer = setInterval(() => {
         if (this.isLoggedIn) {
           this.checkTrack();
@@ -71,33 +70,28 @@ export default {
       }, interval);
     }
   },
-  beforeMount() {
-    this.checkTrack();
-  },
   mounted() {
     if (!this.isLoggedIn) {
       this.$router.push({ path: 'login' });
     }
-    this.startTimer(2000);
+    this.startInterval(2000);
   },
   watch: {
     song: {
       immediate: true,
       handler: function(value) {
         if (!value) {
-          console.log('no song is currently playing');
           this.notListening = true;
+          this.startInterval(2000);
           this.fetchingSong = false;
           this.fetchingLyrics = false;
-          this.startTimer(2000);
         } else if (
           value.artist &&
           value.trackName &&
-          value.artist !== this.artist &&
-          value.trackName !== this.trackName
+          (value.artist !== this.artist ||
+          value.trackName !== this.trackName)
         ) {
-          this.startTimer(6000);
-
+          this.startInterval(8000);
           this.notListening = false;
 
           this.artist = value.artist;
