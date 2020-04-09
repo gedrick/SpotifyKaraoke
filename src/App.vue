@@ -8,6 +8,8 @@
 body {
   background-color: #1a1a1a;
   overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 #app {
@@ -18,7 +20,7 @@ body {
   color: #ffffff;
 }
 
-a {
+a, a:visited {
   color: #9a6dc3;
   text-decoration: none;
 }

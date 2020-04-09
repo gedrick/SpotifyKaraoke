@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <SignIn v-if="!token" />
-    <div class="home__logout" v-if="token">
+    <SignIn v-if="!isLoggedIn" />
+    <div class="home__logout" v-if="isLoggedIn">
       <a href="/logout">Logout</a>
     </div>
 
     <div
-      v-if="!song && notListening"
+      v-if="isLoggedIn && !song && notListening"
       class="home__not-listening"
     >You're signed in, but not listening to anything.</div>
 
     <div class="home__status" v-if="fetchingLyrics">Fetching lyrics...</div>
 
-    <div v-if="song && song.isPlaying">
+    <div class="home__lyrics" v-if="!fetchingLyrics && song && song.isPlaying">
       <Karaoke />
       <ProgressBar />
     </div>
@@ -39,13 +39,14 @@ export default {
 
       notListening: true,
       fetchingSong: false,
-      fetchingLyrics: false,
-
-      token: null
+      fetchingLyrics: false
     };
   },
   computed: {
-    ...mapState(['song', 'lyrics'])
+    ...mapState(['song', 'lyrics']),
+    isLoggedIn() {
+      return this.$cookies.get('loggedIn');
+    }
   },
   methods: {
     ...mapMutations(['setUser']),
@@ -57,13 +58,12 @@ export default {
     this.checkTrack();
   },
   mounted() {
-    this.token = this.$cookies.get('user.token');
-    if (this.token) {
-      this.checkStep = 1;
-      this.queryInterval = setInterval(() => {
+    this.checkStep = 1;
+    this.queryInterval = setInterval(() => {
+      if (this.isLoggedIn) {
         this.checkTrack();
-      }, this.queryTimeout);
-    }
+      }
+    }, this.queryTimeout);
   },
   watch: {
     song: {
@@ -109,8 +109,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  &__lyrics {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
   &__logout {
+    z-index: 5;
     position: fixed;
     top: 0;
     left: 0;
@@ -127,6 +132,11 @@ export default {
   &__logout {
     position: fixed;
     bottom: 0;
+    font-size: 18px;
+
+    a:hover {
+      color: #fff;
+    }
   }
 
   &__status {

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   computed: {
@@ -21,8 +21,8 @@ export default {
     },
     title() {
       return `${this.song.artist} - ${this.song.trackName}`;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -40,7 +40,7 @@ export default {
   justify-content: flex-start;
   align-items: center;
 
-  background-color: #000000;
+  background-color: rgba(41,125,41,.2);
 
   &__title {
     z-index: 5;

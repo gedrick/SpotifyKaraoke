@@ -8,7 +8,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 let settings = {};
 if (isProd) {
-  // settings = require('./server/settings.prod')
+  settings = require('./server/config.prod');
 } else {
   settings = require('./server/config');
 }
@@ -100,7 +100,7 @@ server.get('/api/getLyrics', (req, res) => {
     .search(req.query.query)
     .then((results) => {
       const trackId = results[0].id;
-      return lyricist.song(trackId, {fetchLyrics: true, textFormat: 'html'});
+      return lyricist.song(trackId, { fetchLyrics: true, textFormat: 'html' });
     })
     .then((song) => {
       res.status(200).json({
@@ -109,7 +109,7 @@ server.get('/api/getLyrics', (req, res) => {
       });
     })
     .catch((error) => {
-      res.status(500).json({error});
+      res.status(500).json({ error });
     });
 });
 
@@ -125,13 +125,13 @@ server.get('/api/getCurrentSong', (req, res) => {
     spotifyApi
       .getMyCurrentPlayingTrack({})
       .then((result) => {
-        res.status(200).send({result});
+        res.status(200).send({ result });
       })
       .catch((err) => {
-        res.status(200).send({err});
+        res.status(200).send({ err });
       });
   } else {
-    res.status(200).send({error: 'No access token'});
+    res.status(200).send({ error: 'No access token' });
   }
 });
 
@@ -143,13 +143,17 @@ server.get(
     failureRedirect: '/'
   }),
   (req, res) => {
-    res.cookie('user.token', req.user.accessToken, {
-      maxAge: 900000,
+    res.cookie('loggedIn', true, {
+      maxAge: 1000*60*60*24*7,
       httpOnly: false
     });
+    res.cookie('user.token', req.user.accessToken, {
+      maxAge: 1000*60*60*24*7,
+      httpOnly: true
+    });
     res.cookie('user.refresh', req.user.refreshToken, {
-      maxAge: 900000,
-      httpOnly: false
+      maxAge: 1000*60*60*24*7,
+      httpOnly: true
     });
     res.redirect(`${host}/`);
   }
@@ -157,6 +161,7 @@ server.get(
 
 server.get('/logout', (req, res) => {
   req.logout();
+  res.clearCookie('loggedIn');
   res.clearCookie('user.token');
   res.clearCookie('user.refresh');
   res.redirect(`${host}/#/`);
