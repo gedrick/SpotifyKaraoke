@@ -44,11 +44,16 @@
 
 .signin-login {
   button {
-    background-color: $green;
+    background-color: rgba($green, 0.5);
     border-radius: 0;
     border-style: none;
     padding: 15px;
     cursor: pointer;
+    transition-duration: 0.3s;
+    transition-property: background-color;
+    &:hover {
+      background-color: rgba($green, 1);
+    }
   }
 
   span {

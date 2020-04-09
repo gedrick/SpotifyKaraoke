@@ -24,6 +24,7 @@ module.exports = {
     "indent": ["error", 2],
     "semi": ["error", "always"],
     "semi-style": ["error", "last"],
-    "object-curly-spacing": ["error", "always"]
+    "object-curly-spacing": ["error", "always"],
+    max-len: ["error", { "ignoreUrls": true }]
   },
 };
