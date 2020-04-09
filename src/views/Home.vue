@@ -60,18 +60,15 @@ export default {
         await this.$store.dispatch('getCurrentSong');
       } catch (err) {
         // There is an error communicating with Spotify; force login.
-        clearTimeout(this.queryTimer);
         window.location = '/logout';
       }
     },
     startTimer(interval) {
-      if (this.isLoggedIn) {
-        this.queryTimer = setInterval(() => {
-          if (this.isLoggedIn) {
-            this.checkTrack();
-          }
-        }, interval);
-      }
+      this.queryTimer = setInterval(() => {
+        if (this.isLoggedIn) {
+          this.checkTrack();
+        }
+      }, interval);
     }
   },
   beforeMount() {
