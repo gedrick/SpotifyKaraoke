@@ -155,7 +155,7 @@ server.get(
       maxAge: 1000*60*60*24*7,
       httpOnly: true
     });
-    res.redirect(`${host}/`);
+    res.redirect(`${host}`);
   }
 );
 
@@ -165,7 +165,7 @@ server.get('/logout', (req, res) => {
   res.clearCookie('loggedIn');
   res.clearCookie('user.token');
   res.clearCookie('user.refresh');
-  res.redirect(`${host}/`);
+  res.redirect(`${host}`);
 });
 
 
