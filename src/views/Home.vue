@@ -1,17 +1,18 @@
 <template>
   <div class="home">
-    <SignIn v-if="!isLoggedIn" />
-    <div class="home__logout" v-if="isLoggedIn">
-      <a href="/logout">Logout</a>
+    <div class="home__logout">
+      <router-link to="/logout">Logout</router-link>
     </div>
-
     <div
-      v-if="isLoggedIn && !song && notListening"
+      v-if="!song && notListening"
       class="home__not-listening"
-    >You're signed in, but not listening to anything.</div>
-
-    <div class="home__status" v-if="fetchingLyrics">Fetching lyrics...</div>
-
+    >
+      You're signed in, but not listening to anything.
+    </div>
+    <div class="home__status" v-if="fetchingLyrics">
+      Fetching lyrics...
+      <p>for <span>{{ song.trackName }}</span> by <span>{{ song.artist}}</span></p>
+    </div>
     <div class="home__lyrics" v-if="!fetchingLyrics && song && song.isPlaying">
       <Karaoke />
       <ProgressBar />
@@ -21,7 +22,6 @@
 
 <script>
 import Karaoke from '@/components/Karaoke.vue';
-import SignIn from '@/components/SignIn.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 import { mapMutations, mapState } from 'vuex';
 
@@ -29,13 +29,11 @@ export default {
   name: 'home',
   components: {
     Karaoke,
-    SignIn,
     ProgressBar
   },
   data() {
     return {
-      queryInterval: null,
-      queryTimeout: 3000,
+      queryTimer: null,
 
       notListening: true,
       fetchingSong: false,
@@ -55,20 +53,25 @@ export default {
         await this.$store.dispatch('getCurrentSong');
       } catch (err) {
         // There is an error communicating with Spotify; force login.
-        document.location = '/logout';
+        this.$router.push({ path: 'logout' });
       }
+    },
+    startTimer(interval) {
+      this.queryTimer = setInterval(() => {
+        if (this.isLoggedIn) {
+          this.checkTrack();
+        }
+      }, interval);
     }
   },
   beforeMount() {
     this.checkTrack();
   },
   mounted() {
-    this.checkStep = 1;
-    this.queryInterval = setInterval(() => {
-      if (this.isLoggedIn) {
-        this.checkTrack();
-      }
-    }, this.queryTimeout);
+    if (!this.isLoggedIn) {
+      this.$router.push({ path: 'login' });
+    }
+    this.startTimer(2000);
   },
   watch: {
     song: {
@@ -79,13 +82,15 @@ export default {
           this.notListening = true;
           this.fetchingSong = false;
           this.fetchingLyrics = false;
+          this.startTimer(2000);
         } else if (
           value.artist &&
           value.trackName &&
           value.artist !== this.artist &&
           value.trackName !== this.trackName
         ) {
-          console.log('found new track playing');
+          this.startTimer(6000);
+
           this.notListening = false;
 
           this.artist = value.artist;
@@ -107,6 +112,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/variables.scss';
+
 .home {
   width: 100vw;
   height: 100vh;
@@ -119,6 +126,7 @@ export default {
     height: 100%;
     overflow-y: auto;
   }
+
   &__logout {
     z-index: 5;
     position: fixed;
@@ -127,7 +135,7 @@ export default {
     padding: 8px;
     font-weight: bold;
     text-align: center;
-    color: #ffffff;
+    color: $white;
   }
 
   &__not-listening {
@@ -140,13 +148,22 @@ export default {
     font-size: 18px;
 
     a:hover {
-      color: #fff;
+      color: $white;
     }
   }
 
   &__status {
     font-size: 48px;
-    color: #ffffff;
+    color: $white;
+
+    p {
+      font-size: 14px;
+    }
+
+    span {
+      color: $purple;
+      font-weight: bold;
+    }
   }
 }
 </style>

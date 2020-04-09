@@ -27,6 +27,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/variables.scss';
+
 .progress-bar {
   position: fixed;
   bottom: 0;
@@ -44,7 +46,7 @@ export default {
 
   &__title {
     z-index: 5;
-    color: #ffffff;
+    color: $white;
     font-weight: bold;
     text-align: center;
     width: 100%;
@@ -57,7 +59,7 @@ export default {
     transition-duration: 0.2s;
     height: 100%;
     width: 55%;
-    background-color: #1DB954;
+    background-color: $green;
   }
 }
 </style>

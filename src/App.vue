@@ -5,8 +5,10 @@
 </template>
 
 <style lang="scss">
+@import '@/styles/variables.scss';
+
 body {
-  background-color: #1a1a1a;
+  background-color: $darkgray;
   overflow: hidden;
   padding: 0;
   margin: 0;
@@ -17,11 +19,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #ffffff;
+  color: $white;
 }
 
 a, a:visited {
-  color: #9a6dc3;
+  color: $purple;
   text-decoration: none;
 }
 
@@ -29,7 +31,7 @@ h1 {
   font-family: 'Bungee';
   font-size: 60px;
   margin-bottom: 0;
-  color: #fff;
+  color: $white;
 }
 
 h3 {
