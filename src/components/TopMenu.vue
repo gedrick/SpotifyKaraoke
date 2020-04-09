@@ -8,7 +8,7 @@
         <a @click="showModal('privacy')">Privacy</a>
       </li>
       <li>
-        <router-link to="/logout">Logout</router-link>
+        <a href="/logout">Logout</a>
       </li>
     </ul>
     <div class="modal-container" :class="{hidden: modal === ''}">

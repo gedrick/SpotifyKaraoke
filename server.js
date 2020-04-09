@@ -161,10 +161,12 @@ server.get(
 
 server.get('/logout', (req, res) => {
   req.logout();
+  console.log('logging out user');
+
   res.clearCookie('loggedIn');
   res.clearCookie('user.token');
   res.clearCookie('user.refresh');
-  res.redirect(`${host}/#/`);
+  res.redirect(`${host}/`);
 });
 
 // Start the server.

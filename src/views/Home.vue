@@ -10,7 +10,11 @@
     </div>
     <div class="home__status" v-if="fetchingLyrics">
       Fetching lyrics...
-      <p>for <span>{{ song.trackName }}</span> by <span>{{ song.artist}}</span></p>
+      <p>for <span>
+        {{ song.trackName }}
+      </span> by <span>
+        {{ song.artist}}
+      </span></p>
     </div>
     <div class="home__lyrics" v-if="!fetchingLyrics && song && song.isPlaying">
       <Karaoke />
@@ -50,19 +54,24 @@ export default {
   methods: {
     ...mapMutations(['setUser']),
     async checkTrack() {
+      console.log('checkTrack');
+
       try {
         await this.$store.dispatch('getCurrentSong');
       } catch (err) {
         // There is an error communicating with Spotify; force login.
-        this.$router.push({ path: 'logout' });
+        console.log('failed');
+        window.location = '/logout';
       }
     },
     startTimer(interval) {
-      this.queryTimer = setInterval(() => {
-        if (this.isLoggedIn) {
-          this.checkTrack();
-        }
-      }, interval);
+      if (this.isLoggedIn) {
+        this.queryTimer = setInterval(() => {
+          if (this.isLoggedIn) {
+            this.checkTrack();
+          }
+        }, interval);
+      }
     }
   },
   beforeMount() {
