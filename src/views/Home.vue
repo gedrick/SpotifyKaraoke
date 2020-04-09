@@ -4,7 +4,10 @@
     <div
       v-if="!song && notListening"
       class="home__not-listening"
-    >You're signed in, but not listening to anything.</div>
+    >
+      You're signed in to Spotify, but not listening to anything.<br><br>Start
+      listening on any device - your phone, tablet, or desktop!
+    </div>
     <div class="home__status" v-if="fetchingLyrics">
       Fetching lyrics...
       <p>
@@ -57,7 +60,7 @@ export default {
         await this.$store.dispatch('getCurrentSong');
       } catch (err) {
         // There is an error communicating with Spotify; force login.
-        console.log('failed');
+        clearTimeout(this.queryTimer);
         window.location = '/logout';
       }
     },
@@ -136,6 +139,10 @@ export default {
 
   &__not-listening {
     font-size: 28px;
+    max-width: 50%;
+    @media (min-width: 650px) {
+      font-size: 28px;
+    }
   }
 
   &__logout {

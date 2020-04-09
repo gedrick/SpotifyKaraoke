@@ -21,8 +21,8 @@
             target="_blank"
           >user-read-playback-state</a>
         </b>
-        for the purpose of fetching the song you are currently listening to. For more
-        information, please see the rest of the
+        for the purpose of fetching the song you are currently listening
+        to. For more information, please see the rest of the
         <a
           href="https://developer.spotify.com/documentation/general/guides/scopes/"
           target="_blank"
@@ -33,7 +33,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .signin {
   display: flex;
@@ -64,7 +64,12 @@
 
 .signin-info {
   font-size: 14px;
-  max-width: 50%;
   align-self: center;
+  padding: 0 20px;
+
+  @media (min-width: 650px) {
+    max-width: 50%;
+    padding: 0;
+  }
 }
 </style>

@@ -143,6 +143,7 @@ server.get(
     failureRedirect: '/'
   }),
   (req, res) => {
+    console.log('User logged in...');
     res.cookie('loggedIn', true, {
       maxAge: 1000*60*60*24*7,
       httpOnly: false

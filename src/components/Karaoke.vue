@@ -34,8 +34,13 @@ export default {
   padding-top: 30vh;
   z-index: 4;
   &__lyrics {
-    padding: 20px 0 30px 0;
-    font-size: 40px;
+    font-size: 20px;
+    padding: 20px;
+
+    @media (min-width: 650px) {
+      padding: 20px 0 30px 0;
+      font-size: 40px;
+    }
   }
 }
 .gradient {

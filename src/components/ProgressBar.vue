@@ -1,9 +1,7 @@
 <template>
   <div class="progress-bar" v-if="song && song.isPlaying">
     <div class="progress-bar__title">{{ title }}</div>
-    <div class="progress-bar__progress" :style="{ width: progress + '%'}">
-      &nbsp;
-    </div>
+    <div class="progress-bar__progress" :style="{ width: progress + '%'}">&nbsp;</div>
   </div>
 </template>
 
@@ -27,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .progress-bar {
   position: fixed;
@@ -42,14 +40,19 @@ export default {
   justify-content: flex-start;
   align-items: center;
 
-  background-color: rgba(41,125,41,.2);
+  background-color: rgba(41, 125, 41, 0.2);
 
   &__title {
     z-index: 5;
     color: $white;
     font-weight: bold;
     text-align: center;
+    font-size: 10px;
     width: 100%;
+
+    @media (min-width: 650px) {
+      font-size: 14px;
+    }
   }
 
   &__progress {
