@@ -30,10 +30,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/variables.scss";
+
 .karaoke {
   padding-top: 30vh;
   z-index: 4;
   &__lyrics {
+    scrollbar-color: $green $black;
     font-size: 20px;
     padding: 20px;
     margin-bottom: 30px;

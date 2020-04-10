@@ -2,6 +2,7 @@
   <div class="progress-bar" v-if="song && song.isPlaying">
     <div class="progress-bar__title">{{ title }}</div>
     <div
+      v-if="settings.autoRefresh"
       class="progress-bar__progress"
       :style="{ width: progress + '%'}">
       &nbsp;
@@ -14,7 +15,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['song']),
+    ...mapState(['song', 'settings']),
     progress() {
       const progress = this.song.progress;
       const duration = this.song.duration;

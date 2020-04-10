@@ -86,7 +86,7 @@ export default {
           (value.artist !== this.artist ||
           value.trackName !== this.trackName)
         ) {
-          this.startInterval(6000);
+          this.startInterval(5000);
           this.notListening = false;
 
           this.artist = value.artist;
