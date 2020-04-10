@@ -2,6 +2,9 @@
   <div class="top-menu">
     <ul>
       <li>
+        <a @click="showModal('settings')">Settings</a>
+      </li>
+      <li>
         <a @click="showModal('about')">About</a>
       </li>
       <li>
@@ -11,6 +14,12 @@
         <a href="/logout">Logout</a>
       </li>
     </ul>
+    <button
+      v-if="!settings.autoRefresh"
+      @click="$store.dispatch('getCurrentSong')"
+      href="/auth/spotify">
+      <span>Refresh</span>
+    </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
       <div class="modal about" :class="{visible: modal === 'about'}">
         <div class="modal-close" @click="showModal()">x</div>
@@ -31,8 +40,8 @@
           <span>SpotifyKaraoke</span> was born!
         </p>
         <p>
-          <b>Question: why doesn't the site auto-scroll?</b><br>
-          A great question. You might remember that Spotify had a
+          <b>Question: why doesn't the site auto-scroll?</b>
+          <br />A great question. You might remember that Spotify had a
           service baked right into the app that relied on Musixmatch
           for their karaoke feature. Presumably the licensing got to
           be too expensive, so they nixed it. Unfortunately that's the
@@ -68,14 +77,38 @@
           <b>Tracking:</b> a non-invasive tracking program is used purely
           to see how many people are actually using the site. This is
           used to determine if it's worth the time of upkeep. The service
-          used is <a
-            href="https://www.goatcounter.com/"
-            target="_blank"
-          >GoatCounter</a> which does not track any personally identifiable
-          information. Read their privacy policy <a
-            href="https://www.goatcounter.com/privacy"
-            target="_blank"
-          >here</a>.
+          used is
+          <a href="https://www.goatcounter.com/" target="_blank">GoatCounter</a> which does not track any personally identifiable
+          information. Read their privacy policy
+          <a href="https://www.goatcounter.com/privacy" target="_blank">here</a>.
+        </p>
+      </div>
+      <div class="modal settings" :class="{visible: modal === 'settings'}">
+        <div class="modal-close" @click="showModal()">x</div>
+        <p>
+          <input
+            type="checkbox"
+            :checked="settings.scrollLyrics"
+            name="scrollLyrics"
+            id="scrollLyrics" />
+          <label for="scrollLyrics">&nbsp;Attempt to Scroll Lyrics</label>
+          <br>
+          This will attempt to keep the position of the lyrics in sync
+          with the playback progress of the song. It is an <b>experimental
+          feature</b> and is a rough estimation based on the progress
+          being reported by Spotify.
+        </p>
+        <p>
+          <input
+          type="checkbox"
+          v-model="settings.autoRefresh"
+          name="autoRefresh"
+          id="autoRefresh" />
+          <label for="autoRefresh">&nbsp;Auto-Refresh</label>
+          <br>
+          This will keep pinging Spotify for changes. Disabling this feature
+          will disable lyric scrolling as well as auto-lyric fetching, but
+          will show a Reload button that can be used manually.
         </p>
       </div>
     </div>
@@ -83,11 +116,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   data() {
     return {
       modal: ''
     };
+  },
+  computed: {
+    ...mapState(['settings'])
   },
   methods: {
     showModal(modalName) {
@@ -132,9 +169,12 @@ export default {
     border: 2px solid $black;
     box-shadow: 10px 10px 0px 0px $black;
     font-weight: normal;
+      text-align: left;
+
     span {
       color: $green;
     }
+
     &.visible {
       display: block;
     }
@@ -164,6 +204,27 @@ export default {
   font-weight: bold;
   text-align: center;
   color: $white;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background-color: rgba($green, 0.5);
+    border-radius: 0;
+    border-style: none;
+    padding: 15px;
+    cursor: pointer;
+    transition-duraendtion: 0.3s;
+    transition-property: background-color;
+    align-self: flex-end;
+    &:hover {
+      background-color: rgba($green, 1);
+    }
+
+    span {
+      font-size: 15px;
+      color: $white;
+    }
+  }
 }
 
 ul {

@@ -54,11 +54,11 @@
     &:hover {
       background-color: rgba($green, 1);
     }
-  }
 
-  span {
-    font-size: 20px;
-    color: $white;
+    span {
+      font-size: 20px;
+      color: $white;
+    }
   }
 }
 

@@ -6,7 +6,11 @@ Vue.use(Vuex);
 
 const state = {
   song: null,
-  lyrics: null
+  lyrics: null,
+  settings: {
+    scrollLyrics: true,
+    autoRefresh: true
+  }
 };
 
 const mutations = {

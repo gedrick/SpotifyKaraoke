@@ -2,7 +2,7 @@
   <div class="home">
     <TopMenu />
     <div
-      v-if="!song && notListening"
+      v-if="!song && notListening && settings.autoRefresh"
       class="home__not-listening"
     >
       You're signed in to Spotify, but not listening to anything.<br><br>Start
@@ -46,25 +46,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(['song', 'lyrics']),
+    ...mapState(['song', 'lyrics', 'settings']),
     isLoggedIn() {
       return this.$cookies.get('loggedIn');
     }
   },
   methods: {
     ...mapMutations(['setUser']),
-    async checkTrack() {
-      try {
-        await this.$store.dispatch('getCurrentSong');
-      } catch (err) {
-        window.location = '/logout';
-      }
-    },
     startInterval(interval) {
       window.clearInterval(this.queryTimer);
       this.queryTimer = setInterval(() => {
-        if (this.isLoggedIn) {
-          this.checkTrack();
+        if (this.isLoggedIn && this.settings.autoRefresh) {
+          this.$store.dispatch('getCurrentSong');
         }
       }, interval);
     }
@@ -74,6 +67,9 @@ export default {
       this.$router.push({ path: 'login' });
     }
     this.startInterval(2000);
+  },
+  beforeDestroy() {
+    window.clearTimeout(this.queryTimer);
   },
   watch: {
     song: {
@@ -90,7 +86,7 @@ export default {
           (value.artist !== this.artist ||
           value.trackName !== this.trackName)
         ) {
-          this.startInterval(8000);
+          this.startInterval(6000);
           this.notListening = false;
 
           this.artist = value.artist;
