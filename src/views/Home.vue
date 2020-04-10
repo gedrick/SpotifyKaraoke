@@ -53,11 +53,10 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser']),
-    checkTrack() {
+    async checkTrack() {
       try {
-        this.$store.dispatch('getCurrentSong');
+        await this.$store.dispatch('getCurrentSong');
       } catch (err) {
-        // There is an error communicating with Spotify; force login.
         window.location = '/logout';
       }
     },

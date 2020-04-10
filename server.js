@@ -128,7 +128,9 @@ server.get('/api/getCurrentSong', (req, res) => {
         res.status(200).send({ result });
       })
       .catch((err) => {
-        res.status(200).send({ err });
+        if (err.statusCode === 401) {
+          res.redirect(`${host}/auth/refresh`);
+        }
       });
   } else {
     res.status(200).send({ error: 'No access token' });
@@ -137,6 +139,24 @@ server.get('/api/getCurrentSong', (req, res) => {
 
 // Authentication / Logout
 server.get('/auth/spotify', passport.authenticate('spotify'));
+server.get('/auth/refresh', (req, res) => {
+  console.log('Refreshing token...');
+  const cookies = req.cookies;
+  const refresh = cookies['user.refresh'];
+  spotifyApi.setRefreshToken(refresh);
+  spotifyApi.refreshAccessToken().then(
+    (data) => {
+      console.log('Got new token');
+      res.cookie('user.token', data.body['access_token'], {
+        maxAge: 1000*60*60*24*7,
+        httpOnly: true
+      });
+      res.redirect(`${host}`);
+    }, (err) => {
+      console.log('Error refreshing token, kicking to /logout', err);
+      res.redirect(`${host}/logout`);
+    });
+});
 server.get(
   '/auth/callback',
   passport.authenticate('spotify', {

@@ -25,6 +25,7 @@ const actions = {
         .get('/api/getCurrentSong')
         .then((response) => {
           const data = response.data;
+
           if (data.err) {
             return reject(data.err);
           }
@@ -44,9 +45,10 @@ const actions = {
             songData = null;
           }
           commit('setSong', { song: songData });
-          resolve();
+          return resolve();
         })
-        .catch((err) => {
+        .catch(() => {
+          console.log('getCurrentSong failed');
           commit('setSong', {
             song: {
               isPlaying: false
