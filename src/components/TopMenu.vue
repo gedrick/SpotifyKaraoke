@@ -88,7 +88,7 @@
         <p>
           <input
             type="checkbox"
-            :checked="settings.scrollLyrics"
+            v-model="settings.scrollLyrics"
             name="scrollLyrics"
             id="scrollLyrics" />
           <label for="scrollLyrics">&nbsp;Attempt to Scroll Lyrics</label>

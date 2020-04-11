@@ -1,34 +1,39 @@
 <template>
   <div class="signin">
-    <h1>Spotify Karaoke</h1>
-    <h3>Instant lyrics for whatever you're listening to!</h3>
-    <div class="signin-login">
-      <a href="/auth/spotify">
-        <button href="/auth/spotify">
-          <span>Sign in With Spotify</span>
-        </button>
-      </a>
+    <div class="text">
+      <div class="inner">
+        <h1>Spotify Karaoke</h1>
+        <h3>Instant lyrics for whatever you're listening to!</h3>
+        <div class="signin-login">
+          <a href="/auth/spotify">
+            <button href="/auth/spotify">
+              <span>Sign in with Spotify</span>
+            </button>
+          </a>
+        </div>
+        <div class="signin-info">
+          <p>
+            Note: by signing into this site with your Spotify account,
+            we will receive absolutely
+            <i>no</i> personal information. The only permission scope
+            required for this service is
+            <b>
+              <a
+                href="https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state"
+                target="_blank"
+              >user-read-playback-state</a>
+            </b>
+            for the purpose of fetching the song you are currently listening
+            to. For more information, please see the rest of the
+            <a
+              href="https://developer.spotify.com/documentation/general/guides/scopes/"
+              target="_blank"
+            >Spotify API documentation</a>.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="signin-info">
-      <p>
-        Note: by signing into this site with your Spotify account,
-        we will receive absolutely
-        <i>no</i> personal information. The only permission scope
-        required for this service is
-        <b>
-          <a
-            href="https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state"
-            target="_blank"
-          >user-read-playback-state</a>
-        </b>
-        for the purpose of fetching the song you are currently listening
-        to. For more information, please see the rest of the
-        <a
-          href="https://developer.spotify.com/documentation/general/guides/scopes/"
-          target="_blank"
-        >Spotify API documentation</a>.
-      </p>
-    </div>
+    <div class="image" :style="{ backgroundImage: 'url(\'/background-image.png\')' }"></div>
   </div>
 </template>
 
@@ -37,9 +42,88 @@
 
 .signin {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
+}
+
+.inner {
+  display: grid;
+  justify-self: center;
+  align-self: center;
+  padding-top: 20vh;
+
+  @media (min-width: 450px) {
+    max-width: 70%;
+  }
+
+  @media (min-width: 650px) {
+    padding-top: 0;
+    max-width: unset;
+  }
+
+  @media (min-width: 650px) {
+    max-width: 50%;
+  }
+}
+
+.text {
+  display: flex;
   flex-direction: column;
   justify-self: center;
   align-self: center;
+  z-index: 4;
+
+  @media (min-width: 1024px) {
+    margin-right: -20%;
+  }
+}
+
+.image {
+  z-index: 3;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.1;
+
+  animation: glowAnimation;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+
+  @media (min-width: 650px) {
+    margin-left: -20%;
+    opacity: 0.5;
+  }
+
+  @media (min-width: 1024px) {
+    margin-left: -0%;
+  }
+}
+
+.text,
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  @media (min-width: 650px) {
+    position: initial;
+    top: unset;
+    left: unset;
+    width: 50%;
+    height: auto;
+  }
+}
+
+h1 {
+  text-shadow: 7px 4px 1px black;
 }
 
 .signin-login {
@@ -50,9 +134,12 @@
     padding: 15px;
     cursor: pointer;
     transition-duration: 0.3s;
-    transition-property: background-color;
-    &:hover {
+    transition-property: background-color, box-shadow;
+
+    &:hover,
+    &:active {
       background-color: rgba($green, 1);
+      box-shadow: 0 0px 40px black;
     }
 
     span {
@@ -68,7 +155,6 @@
   padding: 0 20px;
 
   @media (min-width: 650px) {
-    max-width: 50%;
     padding: 0;
   }
 }

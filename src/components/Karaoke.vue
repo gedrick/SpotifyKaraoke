@@ -1,7 +1,11 @@
 <template>
   <div class="karaoke" v-if="song && song.isPlaying">
     <div class="gradient top"></div>
-    <div class="karaoke__lyrics" v-html="parsedLyrics" v-if="lyrics"></div>
+    <div
+      v-if="lyrics"
+      class="karaoke__lyrics"
+      v-html="parsedLyrics">
+    </div>
     <div class="gradient"></div>
   </div>
 </template>
