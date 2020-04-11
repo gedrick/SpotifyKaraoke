@@ -1,4 +1,4 @@
-# karaoke-night
+# spotify-karaoke
 
 ## Project setup
 ```
