@@ -53,11 +53,11 @@ export default {
     color: $white;
     font-weight: bold;
     text-align: center;
-    font-size: 10px;
+    font-size: 14px;
     width: 100%;
 
     @media (min-width: 650px) {
-      font-size: 14px;
+      font-size: 18px;
     }
   }
 

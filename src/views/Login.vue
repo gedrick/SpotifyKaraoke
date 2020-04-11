@@ -6,7 +6,7 @@
         <h3>Instant lyrics for whatever you're listening to!</h3>
         <div class="signin-login">
           <a href="/auth/spotify">
-            <button href="/auth/spotify">
+            <button class="action" href="/auth/spotify">
               <span>Sign in with Spotify</span>
             </button>
           </a>
@@ -124,29 +124,6 @@
 
 h1 {
   text-shadow: 7px 4px 1px black;
-}
-
-.signin-login {
-  button {
-    background-color: rgba($green, 0.5);
-    border-radius: 0;
-    border-style: none;
-    padding: 15px;
-    cursor: pointer;
-    transition-duration: 0.3s;
-    transition-property: background-color, box-shadow;
-
-    &:hover,
-    &:active {
-      background-color: rgba($green, 1);
-      box-shadow: 0 0px 40px black;
-    }
-
-    span {
-      font-size: 20px;
-      color: $white;
-    }
-  }
 }
 
 .signin-info {

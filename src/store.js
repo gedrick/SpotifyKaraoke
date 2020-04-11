@@ -14,6 +14,10 @@ const state = {
 };
 
 const mutations = {
+  toggleSetting(state, key) {
+    const value = state.settings[key];
+    Vue.set(state.settings, key, !value);
+  },
   setSong(state, { song }) {
     Vue.set(state, 'song', song);
   },

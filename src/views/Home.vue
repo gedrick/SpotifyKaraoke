@@ -15,7 +15,10 @@
         <span>{{ song.artist}}</span>
       </p>
     </div>
-    <div v-if="!fetchingLyrics && song && song.isPlaying" ref="lyricContainer" class="home__lyrics">
+    <div
+      v-if="!fetchingLyrics && song && song.isPlaying"
+      ref="lyricContainer"
+      class="home__lyrics">
       <Karaoke />
       <ProgressBar />
     </div>
@@ -66,19 +69,22 @@ export default {
       this.queryTimer = setInterval(() => {
         if (this.settings.autoRefresh) {
           this.$store.dispatch('getCurrentSong');
-        }
-        if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
-          const box = this.$refs.lyricContainer;
-          // Remove the upper padding.
-          const totalHeight = box.scrollHeight * 0.7;
-          const newPosition = totalHeight * (this.songPercentage / 100);
-          this.scrollLyricsToPosition(newPosition);
+
+          if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
+            const box = this.$refs.lyricContainer;
+            // Remove the upper padding.
+            const totalHeight = box.scrollHeight * 0.7;
+            const newPosition = Math.round(
+              totalHeight * (this.songPercentage / 100)
+            );
+            this.scrollLyricsToPosition(newPosition);
+          }
         }
       }, interval);
     },
     scrollLyricsToPosition(position) {
-      const box = this.$refs.lyricContainer;
-      box.scrollTop = position;
+      // Enhance this to smooth out the scrolling.
+      this.$refs.lyricContainer.scrollTop = position;
     }
   },
   mounted() {

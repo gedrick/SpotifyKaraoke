@@ -3,3 +3,28 @@ $white: #ffffff;
 $black: #000000;
 $darkgray: #1a1a1a;
 $green: #1DB954;
+
+button.action {
+  background-color: rgba($green, 0.5);
+  border-radius: 0;
+  border-style: none;
+  padding: 15px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  transition-property: background-color, box-shadow;
+
+  &:hover,
+  &:active {
+    background-color: rgba($green, 1);
+    box-shadow: 0 0px 40px black;
+  }
+
+  span {
+    font-size: 20px;
+    color: $white;
+  }
+
+  &.disabled {
+    background-color: rgba($black, 0.5);
+  }
+}

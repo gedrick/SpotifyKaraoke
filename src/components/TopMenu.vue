@@ -16,9 +16,17 @@
     </ul>
     <button
       v-if="!settings.autoRefresh"
+      class="action"
       @click="$store.dispatch('getCurrentSong')"
       href="/auth/spotify">
       <span>Refresh</span>
+    </button>
+    <button
+      class="action"
+      :class="{disabled: !settings.scrollLyrics}"
+      @click="toggleSetting('scrollLyrics')"
+      href="/auth/spotify">
+      <span>Scroll Lyrics</span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
       <div class="modal about" :class="{visible: modal === 'about'}">
@@ -87,19 +95,6 @@
         <div class="modal-close" @click="showModal()">x</div>
         <p>
           <input
-            type="checkbox"
-            v-model="settings.scrollLyrics"
-            name="scrollLyrics"
-            id="scrollLyrics" />
-          <label for="scrollLyrics">&nbsp;Attempt to Scroll Lyrics</label>
-          <br>
-          This will attempt to keep the position of the lyrics in sync
-          with the playback progress of the song. It is an <b>experimental
-          feature</b> and is a rough estimation based on the progress
-          being reported by Spotify.
-        </p>
-        <p>
-          <input
           type="checkbox"
           v-model="settings.autoRefresh"
           name="autoRefresh"
@@ -116,7 +111,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 export default {
   data() {
     return {
@@ -127,6 +122,7 @@ export default {
     ...mapState(['settings'])
   },
   methods: {
+    ...mapMutations(['toggleSetting']),
     showModal(modalName) {
       this.modal = modalName || '';
     }
@@ -206,25 +202,7 @@ export default {
   color: $white;
   display: flex;
   flex-direction: column;
-
-  button {
-    background-color: rgba($green, 0.5);
-    border-radius: 0;
-    border-style: none;
-    padding: 15px;
-    cursor: pointer;
-    transition-duraendtion: 0.3s;
-    transition-property: background-color;
-    align-self: flex-end;
-    &:hover {
-      background-color: rgba($green, 1);
-    }
-
-    span {
-      font-size: 15px;
-      color: $white;
-    }
-  }
+  align-items: flex-end;
 }
 
 ul {
@@ -232,7 +210,7 @@ ul {
   flex-direction: row;
   list-style: none;
 
-  li {
+  li:not(:last-of-type) {
     margin-right: 15px;
     cursor: pointer;
   }
