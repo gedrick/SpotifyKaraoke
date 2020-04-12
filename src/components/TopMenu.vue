@@ -8,6 +8,9 @@
         <a @click="showModal('about')">About</a>
       </li>
       <li>
+        <a @click="showModal('bookmark')">Bookmark</a>
+      </li>
+      <li>
         <a @click="showModal('privacy')">Privacy</a>
       </li>
       <li v-if="isLoggedIn">
@@ -53,16 +56,6 @@
           <span>SpotifyKaraoke</span> was born!
         </p>
         <p>
-          <b>Question: why doesn't the site auto-scroll?</b>
-          <br />A great question. You might remember that Spotify had a
-          service baked right into the app that relied on Musixmatch
-          for their karaoke feature. Presumably the licensing got to
-          be too expensive, so they nixed it. Unfortunately that's the
-          only source for timestamped lyrics, and it would cost a lot
-          of money to bring it back. So until it magically becomes
-          free, this is the only option.
-        </p>
-        <p>
           The site is written in Vuejs with Node on the backend. It
           is open-source. Check out the Github page
           <a
@@ -74,6 +67,34 @@
             target="_blank"
           >Genius</a> for fetching
           the lyrics.
+        </p>
+      </div>
+      <div class="modal bookmark" :class="{visible: modal === 'bookmark'}">
+        <div class="modal-close" @click="showModal()">x</div>
+        <h4>Adding SpotifyKaraoke to your iOS Home Screen</h4>
+        <p>
+          Here's a neat way to get instant lyrics - add it to your
+          home screen! That way, you have one-button access to lyrics
+          for whatever it is you're listening to.
+        </p>
+        <b>Step 1</b><br>
+        <p>
+          Open SpotifyKaraoke in Safari.
+        </p>
+        <b>Step 2</b><br>
+        <p>
+          Click the <i>Share</i> button.<br>
+          <img src="/share.png">
+        </p>
+        <b>Step 3</b><br>
+        <p>
+          Click <i>Add to Home Screen</i>.<br>
+          <img src="/add-to-home.png">
+        </p>
+        <b>Step 4</b><br>
+        <p>
+          All done! You now have a one-tap icon to instant lyrics.<br>
+          <img src="/icon.png">
         </p>
       </div>
       <div class="modal privacy" :class="{visible: modal === 'privacy'}">
@@ -132,16 +153,20 @@
       <div class="modal settings" :class="{visible: modal === 'settings'}">
         <div class="modal-close" @click="showModal()">x</div>
         <p>
-          <input type="checkbox" v-model="settings.autoRefresh" name="autoRefresh" id="autoRefresh" />
+          <input
+            type="checkbox"
+            v-model="settings.autoRefresh"
+            name="autoRefresh"
+            id="autoRefresh" />
           <label for="autoRefresh">&nbsp;Auto-Refresh</label>
-          <br />This will continuously ping Spotify to see what you're listening to.
-          Turning off this feature will disable
+          <br />This will continuously ping Spotify to see what you're
+          listening to. Turning off this feature will disable
           <b>Karaoke Mode</b> and will
           prevent SpotifyKaraoke from automatically grabbing lyrics when a new
           song starts to play.
           <br />
-          <br />However, it will show a button to manually update the lyrics to match
-          your current song.
+          <br />However, it will show a button to manually update the
+          lyrics to match your current song.
         </p>
       </div>
     </div>
@@ -255,6 +280,9 @@ ul {
   }
   li:not(:last-of-type) {
     margin-right: 15px;
+    cursor: pointer;
+  }
+  li {
     cursor: pointer;
   }
 }
