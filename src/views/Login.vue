@@ -1,5 +1,6 @@
 <template>
   <div class="signin">
+    <TopMenu />
     <div class="text">
       <div class="inner">
         <h1>Spotify Karaoke</h1>
@@ -33,10 +34,22 @@
         </div>
       </div>
     </div>
-    <div class="image" :style="{ backgroundImage: 'url(\'/background-image.png\')' }"></div>
+    <div
+      class="image"
+      :style="{ backgroundImage: 'url(\'/background-image.png\')' }">
+    </div>
   </div>
 </template>
 
+<script>
+import TopMenu from '@/components/TopMenu.vue';
+
+export default {
+  components: {
+    TopMenu
+  }
+};
+</script>
 <style lang="scss" scoped>
 @import "@/styles/variables.scss";
 

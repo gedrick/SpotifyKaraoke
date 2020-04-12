@@ -1,7 +1,7 @@
 <template>
   <div class="top-menu">
     <ul>
-      <li>
+      <li v-if="isLoggedIn">
         <a @click="showModal('settings')">Settings</a>
       </li>
       <li>
@@ -10,25 +10,27 @@
       <li>
         <a @click="showModal('privacy')">Privacy</a>
       </li>
-      <li>
+      <li v-if="isLoggedIn">
         <a href="/logout">Logout</a>
       </li>
     </ul>
     <button
-      v-if="!settings.autoRefresh"
+      v-if="isLoggedIn && !settings.autoRefresh"
       class="action"
       @click="$store.dispatch('getCurrentSong')"
-      href="/auth/spotify">
+      href="/auth/spotify"
+    >
       <span>Get Lyrics</span>
     </button>
     <button
-      v-if="settings.autoRefresh"
+      v-if="isLoggedIn && settings.autoRefresh"
       class="action"
       :class="{disabled: !settings.scrollLyrics}"
       @click="toggleSetting('scrollLyrics')"
-      href="/auth/spotify">
+      href="/auth/spotify"
+    >
       <span>
-        <input type="checkbox" v-model="settings.scrollLyrics">Karaoke Mode
+        <input type="checkbox" v-model="settings.scrollLyrics" />Karaoke Mode
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
@@ -76,39 +78,69 @@
       </div>
       <div class="modal privacy" :class="{visible: modal === 'privacy'}">
         <div class="modal-close" @click="showModal()">x</div>
+        <h4>tl;dr</h4>
         <p>
-          <b>tl;dr:</b> SpotifyKaraoke is a utility site that does not
-          collect, view, retain, or in any way store your personal data.
-          Logging in with your Spotify account provides a token which
-          gets passed between the browser and the server to make requests
-          on your behalf. In this case, to retrieve your currently playing
-          track, and nothing else.
+          SpotifyKaraoke is a small utility project specifically built out
+          of need. I can't stand companies selling my data any less than you
+          do, so the minimal amount
+          of information collected is purely for site functionality.
+          SpotifyKaraoke is merely a side project for a full time
+          developer. In fact the whole thing is open source, so if you don't
+          trust that I'm not stealing your identity, feel free to look at
+          <a href="https://github.com/gedrick/SpotifyKaraoke" target="_blank">
+          the source code</a> :)
         </p>
         <p>
-          <b>Tracking:</b> a non-invasive tracking program is used purely
-          to see how many people are actually using the site. This is
+          Thanks for reading, and I  truly hope you get as much use out
+          of it as I do!  -Gedrick
+        </p>
+        <h4>Cookie Usage</h4>
+        <p>
+          There are three cookies set on SpotifyKaraoke, all of which are
+          used solely for managing your logged-in status:
+        </p>
+        <p>
+          <b>isLoggedIn:</b> convenience cookie so the app
+          knows you are logged in, so it may forward you to the right
+          page.
+        </p>
+        <p>
+          <b>user.token:</b> passed back from Spotify (httponly) and used
+          to query Spotify and find your current track.
+        </p>
+        <p>
+          <b>user.refresh:</b> passed back from Spotify (httponly) and
+          used to refresh your token in the event that your token times out.
+        </p>
+        <h4>Tracking</h4>
+        <p>
+          A non-invasive tracker is used purely
+          to see how many people are using the site. This is
           used to determine if it's worth the time of upkeep. The service
           used is
-          <a href="https://www.goatcounter.com/" target="_blank">GoatCounter</a> which does not track any personally identifiable
+          <a
+            href="https://www.goatcounter.com/"
+            target="_blank"
+          >GoatCounter</a> which does not track any personally identifiable
           information. Read their privacy policy
-          <a href="https://www.goatcounter.com/privacy" target="_blank">here</a>.
+          <a
+            href="https://www.goatcounter.com/privacy"
+            target="_blank"
+          >here</a>.
         </p>
       </div>
       <div class="modal settings" :class="{visible: modal === 'settings'}">
         <div class="modal-close" @click="showModal()">x</div>
         <p>
-          <input
-          type="checkbox"
-          v-model="settings.autoRefresh"
-          name="autoRefresh"
-          id="autoRefresh" />
+          <input type="checkbox" v-model="settings.autoRefresh" name="autoRefresh" id="autoRefresh" />
           <label for="autoRefresh">&nbsp;Auto-Refresh</label>
-          <br>
-          This will continuously ping Spotify to see what you're listening to.
-          Turning off this feature will disable <b>Karaoke Mode</b> and will
+          <br />This will continuously ping Spotify to see what you're listening to.
+          Turning off this feature will disable
+          <b>Karaoke Mode</b> and will
           prevent SpotifyKaraoke from automatically grabbing lyrics when a new
-          song starts to play.<br><br>
-          However, it will show a button to manually update the lyrics to match
+          song starts to play.
+          <br />
+          <br />However, it will show a button to manually update the lyrics to match
           your current song.
         </p>
       </div>
@@ -125,7 +157,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(['settings'])
+    ...mapState(['settings']),
+    isLoggedIn() {
+      return this.$cookies.get('loggedIn');
+    }
   },
   methods: {
     ...mapMutations(['toggleSetting']),
@@ -171,7 +206,7 @@ export default {
     border: 2px solid $black;
     box-shadow: 10px 10px 0px 0px $black;
     font-weight: normal;
-      text-align: left;
+    text-align: left;
 
     span {
       color: $green;
@@ -215,7 +250,9 @@ ul {
   display: flex;
   flex-direction: row;
   list-style: none;
-
+  &.vertical {
+    flex-direction: column;
+  }
   li:not(:last-of-type) {
     margin-right: 15px;
     cursor: pointer;
