@@ -19,7 +19,7 @@
       class="action"
       @click="$store.dispatch('getCurrentSong')"
       href="/auth/spotify">
-      <span>Fetch Lyrics</span>
+      <span>Get Lyrics</span>
     </button>
     <button
       v-if="settings.autoRefresh"
@@ -28,7 +28,7 @@
       @click="toggleSetting('scrollLyrics')"
       href="/auth/spotify">
       <span>
-        <input type="checkbox" v-model="settings.scrollLyrics">Scroll Lyrics
+        <input type="checkbox" v-model="settings.scrollLyrics">Karaoke Mode
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
@@ -104,9 +104,12 @@
           id="autoRefresh" />
           <label for="autoRefresh">&nbsp;Auto-Refresh</label>
           <br>
-          This will keep pinging Spotify for changes. Disabling this feature
-          will disable lyric scrolling as well as auto-lyric fetching, but
-          will show a Reload button that can be used manually.
+          This will continuously ping Spotify to see what you're listening to.
+          Turning off this feature will disable <b>Karaoke Mode</b> and will
+          prevent SpotifyKaraoke from automatically grabbing lyrics when a new
+          song starts to play.<br><br>
+          However, it will show a button to manually update the lyrics to match
+          your current song.
         </p>
       </div>
     </div>

@@ -1,14 +1,11 @@
 <template>
   <div class="home">
     <TopMenu />
-    <div v-if="!song && notListening && !fetchingSong" class="home__not-listening">
+    <div v-if="!song && notListening" class="home__not-listening">
       You're signed in to Spotify, but not listening to anything.
       <br />
       <br />Start
       listening on any device - your phone, tablet, or desktop!
-    </div>
-    <div class="home__status" v-if="fetchingSong && !song">
-      Talking to Spotify...
     </div>
     <div class="home__status" v-if="fetchingLyrics">
       Fetching lyrics...
@@ -46,7 +43,6 @@ export default {
       queryTimer: null,
 
       notListening: true,
-      fetchingSong: false,
       fetchingLyrics: false
     };
   },
@@ -71,9 +67,7 @@ export default {
       window.clearInterval(this.queryTimer);
       this.queryTimer = setInterval(async () => {
         if (this.settings.autoRefresh) {
-          this.fetchingSong = true;
           await this.$store.dispatch('getCurrentSong');
-          this.fetchingSong = false;
           if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
             const box = this.$refs.lyricContainer;
             // Remove the upper padding.
@@ -107,7 +101,6 @@ export default {
         if (!value) {
           this.notListening = true;
           this.startInterval(2000);
-          this.fetchingSong = false;
           this.fetchingLyrics = false;
         } else if (
           value.artist &&
