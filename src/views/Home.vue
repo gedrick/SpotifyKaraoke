@@ -142,6 +142,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    scrollbar-color: $green $darkgray;
   }
 
   &__not-listening {

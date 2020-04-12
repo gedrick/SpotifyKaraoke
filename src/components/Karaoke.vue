@@ -40,13 +40,12 @@ export default {
   padding-top: 30vh;
   z-index: 4;
   &__lyrics {
-    scrollbar-color: $green $black;
     font-size: 20px;
     padding: 20px;
     margin-bottom: 30px;
 
     @media (min-width: 650px) {
-      padding: 20px 0 30px 0;
+      padding: 20px 0 50px 0;
       font-size: 40px;
     }
   }
