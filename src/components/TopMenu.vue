@@ -19,14 +19,17 @@
       class="action"
       @click="$store.dispatch('getCurrentSong')"
       href="/auth/spotify">
-      <span>Refresh</span>
+      <span>Fetch Lyrics</span>
     </button>
     <button
+      v-if="settings.autoRefresh"
       class="action"
       :class="{disabled: !settings.scrollLyrics}"
       @click="toggleSetting('scrollLyrics')"
       href="/auth/spotify">
-      <span>Scroll Lyrics</span>
+      <span>
+        <input type="checkbox" v-model="settings.scrollLyrics">Scroll Lyrics
+      </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
       <div class="modal about" :class="{visible: modal === 'about'}">

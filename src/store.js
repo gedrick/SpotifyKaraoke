@@ -62,6 +62,7 @@ const actions = {
               isPlaying: false
             }
           });
+          return resolve();
         });
     });
   },
