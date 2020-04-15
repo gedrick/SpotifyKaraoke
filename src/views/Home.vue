@@ -81,7 +81,7 @@ export default {
             this.idleCounter++;
             if (this.idleCounter >= this.idleThreshold) {
               this.idleMode = true;
-              this.startInterval(10000);
+              this.startInterval(30000);
             }
           } else if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
             const box = this.$refs.lyricContainer;
