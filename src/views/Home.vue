@@ -6,6 +6,11 @@
       <br />
       <br />Start
       listening on any device - your phone, tablet, or desktop!
+      <br><br>
+      <p class="idle-mode" @click="getCurrentSong" v-if="idleMode">
+        It looks like you're idle! We'll still check Spotify every 30 seconds.
+        Click here to check manually.
+      </p>
     </div>
     <div class="home__status" v-if="fetchingLyrics">
       Fetching lyrics...
@@ -29,7 +34,7 @@
 import TopMenu from '@/components/TopMenu.vue';
 import Karaoke from '@/components/Karaoke.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'home',
@@ -41,6 +46,9 @@ export default {
   data() {
     return {
       queryTimer: null,
+      idleCounter: 0,
+      idleThreshold: 3,
+      idleMode: false,
 
       notListening: true,
       fetchingLyrics: false
@@ -63,12 +71,19 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser']),
+    ...mapActions(['getCurrentSong', 'getLyrics']),
     startInterval(interval) {
       window.clearInterval(this.queryTimer);
       this.queryTimer = setInterval(async () => {
         if (this.settings.autoRefresh) {
-          await this.$store.dispatch('getCurrentSong');
-          if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
+          await this.getCurrentSong();
+          if (!this.song && !this.idleMode) {
+            this.idleCounter++;
+            if (this.idleCounter >= this.idleThreshold) {
+              this.idleMode = true;
+              this.startInterval(10000);
+            }
+          } else if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
             const box = this.$refs.lyricContainer;
             // Remove the upper padding.
             const totalHeight = box.scrollHeight * 0.7;
@@ -107,17 +122,19 @@ export default {
           value.trackName &&
           (value.artist !== this.artist || value.trackName !== this.trackName)
         ) {
-          this.startInterval(5000);
+          // Reset all the idle counters.
+          this.idleMode = false;
+          this.idleCounter = 0;
+
           this.notListening = false;
 
           this.artist = value.artist;
           this.trackName = value.trackName;
 
           this.fetchingLyrics = true;
-          this.$store
-            .dispatch('getLyrics', {
-              query: `${this.song.artist} ${this.song.trackName}`
-            })
+          this.getLyrics({
+            query: `${this.song.artist} ${this.song.trackName}`
+          })
             .then(() => {
               this.fetchingLyrics = false;
             });
@@ -150,6 +167,12 @@ export default {
     max-width: 50%;
     @media (min-width: 650px) {
       font-size: 28px;
+    }
+
+    .idle-mode {
+      font-size: 12px;
+      cursor: pointer;
+      color: $green;
     }
   }
 

@@ -96,6 +96,7 @@ passport.deserializeUser(function(user, done) {
 const Lyricist = require('lyricist');
 const lyricist = new Lyricist(settings.genius.token);
 server.get('/api/getLyrics', (req, res) => {
+  console.log(`Lyrics search: ${req.query.query}...`);
   lyricist
     .search(req.query.query)
     .then((results) => {
