@@ -45,7 +45,7 @@ export default {
     margin-bottom: 30px;
 
     @media (min-width: 650px) {
-      padding: 20px 0 50px 0;
+      padding: 20px 0 70px 0;
       font-size: 40px;
     }
   }
