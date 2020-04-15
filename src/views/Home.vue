@@ -47,7 +47,7 @@ export default {
     return {
       queryTimer: null,
       idleCounter: 0,
-      idleThreshold: 3,
+      idleThreshold: 20,
       idleMode: false,
 
       notListening: true,
