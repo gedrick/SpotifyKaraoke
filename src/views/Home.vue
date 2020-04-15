@@ -8,8 +8,7 @@
       listening on any device - your phone, tablet, or desktop!
       <br><br>
       <p class="idle-mode" @click="getCurrentSong" v-if="idleMode">
-        It looks like you're idle! We'll still check Spotify every 30 seconds.
-        Click here to check manually.
+        It looks like you're idle! Click here to wake up SpotifyKaraoke.
       </p>
     </div>
     <div class="home__status" v-if="fetchingLyrics">
@@ -47,7 +46,7 @@ export default {
     return {
       queryTimer: null,
       idleCounter: 0,
-      idleThreshold: 20,
+      idleThreshold: 30,
       idleMode: false,
 
       notListening: true,
@@ -81,7 +80,7 @@ export default {
             this.idleCounter++;
             if (this.idleCounter >= this.idleThreshold) {
               this.idleMode = true;
-              this.startInterval(30000);
+              window.clearInterval(this.queryTimer);
             }
           } else if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
             const box = this.$refs.lyricContainer;
@@ -118,13 +117,17 @@ export default {
           this.startInterval(2000);
           this.fetchingLyrics = false;
         } else if (
-          value.artist &&
-          value.trackName &&
-          (value.artist !== this.artist || value.trackName !== this.trackName)
+          this.idleMode ||
+          (
+            value.artist &&
+            value.trackName &&
+            (value.artist !== this.artist || value.trackName !== this.trackName)
+          )
         ) {
           // Reset all the idle counters.
           this.idleMode = false;
           this.idleCounter = 0;
+          this.startInterval(2000);
 
           this.notListening = false;
 
