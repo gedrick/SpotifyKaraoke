@@ -135,8 +135,13 @@ export default {
           this.trackName = value.trackName;
 
           this.fetchingLyrics = true;
+          let trackName = this.song.trackName;
+
+          trackName = trackName.replace(/remaster(?:ed)? \d{2,4}/i, '');
+          trackName = trackName.replace(/\d{2,4} remaster(?:ed)?/i, '');
+
           this.getLyrics({
-            query: `${this.song.artist} ${this.song.trackName}`
+            query: `${this.song.artist} ${trackName}`
           })
             .then(() => {
               this.fetchingLyrics = false;
