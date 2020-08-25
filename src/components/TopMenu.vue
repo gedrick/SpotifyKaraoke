@@ -41,7 +41,7 @@
       @click="nextActiveLyricResult()"
     >
       <span>
-        Next Lyrics
+        More Results ({{activeLyricResult + 1}}/{{results.length}})
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
@@ -190,7 +190,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['settings', 'results']),
+    ...mapState(['settings', 'results', 'activeLyricResult']),
     isLoggedIn() {
       return this.$cookies.get('loggedIn');
     }

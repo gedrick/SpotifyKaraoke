@@ -41,7 +41,7 @@ const mutations = {
   },
   nextActiveLyricResult(state) {
     let newIndex = 0;
-    if (state.activeLyricResult < state.results.length) {
+    if (state.activeLyricResult + 1 < state.results.length) {
       newIndex = state.activeLyricResult + 1;
     }
     Vue.set(state, 'activeLyricResult', newIndex);
