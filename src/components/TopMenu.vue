@@ -30,10 +30,18 @@
       class="action"
       :class="{disabled: !settings.scrollLyrics}"
       @click="toggleSetting('scrollLyrics')"
-      href="/auth/spotify"
     >
       <span>
         <input type="checkbox" v-model="settings.scrollLyrics" />Autoscroll
+      </span>
+    </button>
+    <button
+      v-if="isLoggedIn && results.length > 1"
+      class="action"
+      @click="nextActiveLyricResult()"
+    >
+      <span>
+        Next Lyrics
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
@@ -41,7 +49,7 @@
         <div class="modal-close" @click="showModal()">x</div>
         <p>
           Hey there! Thanks for checking out
-          <span>SpotifyKaraoke</span>!
+          <span>SpotifyKaraoke</span>.
         </p>
         <p>
           This site was born out of necessity - while listening
@@ -53,7 +61,7 @@
           What I wanted was a site that I could bookmark, and pull
           up at any time to see lyrics to whatever I was listening
           to at the time. And thus,
-          <span>SpotifyKaraoke</span> was born!
+          <span>SpotifyKaraoke</span> was born.
         </p>
         <p>
           The site is written in Vuejs with Node on the backend. It
@@ -74,7 +82,7 @@
         <h4>Adding SpotifyKaraoke to your iOS Home Screen</h4>
         <p>
           Here's a neat way to get instant lyrics - add it to your
-          home screen! That way, you have one-button access to lyrics
+          home screen. That way, you have one-button access to lyrics
           for whatever it is you're listening to.
         </p>
         <b>Step 1</b><br>
@@ -182,13 +190,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(['settings']),
+    ...mapState(['settings', 'results']),
     isLoggedIn() {
       return this.$cookies.get('loggedIn');
     }
   },
   methods: {
-    ...mapMutations(['toggleSetting']),
+    ...mapMutations(['toggleSetting', 'nextActiveLyricResult']),
     showModal(modalName) {
       this.modal = modalName || '';
     }
