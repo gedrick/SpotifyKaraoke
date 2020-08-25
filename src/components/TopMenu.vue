@@ -37,11 +37,11 @@
     </button>
     <button
       v-if="isLoggedIn && results.length > 1"
-      class="action"
+      class="action more-results"
       @click="nextActiveLyricResult()"
     >
       <span>
-        More Results ({{activeLyricResult + 1}}/{{results.length}})
+        More ({{activeLyricResult + 1}}/{{results.length}})
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
@@ -293,5 +293,10 @@ ul {
   li {
     cursor: pointer;
   }
+}
+
+button.more-results {
+  position: fixed;
+  bottom: 90px;
 }
 </style>
