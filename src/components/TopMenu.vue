@@ -33,7 +33,7 @@
       href="/auth/spotify"
     >
       <span>
-        <input type="checkbox" v-model="settings.scrollLyrics" />Karaoke Mode
+        <input type="checkbox" v-model="settings.scrollLyrics" />Autoscroll
       </span>
     </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
