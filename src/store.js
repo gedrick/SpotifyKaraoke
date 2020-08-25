@@ -11,6 +11,16 @@ const state = {
   settings: {
     scrollLyrics: true,
     autoRefresh: true
+  },
+  activeLyricResult: 0
+};
+
+const getters = {
+  currentLyrics(state) {
+    if (state.results.length) {
+      return state.results[state.activeLyricResult].lyrics || 0;
+    }
+    return false;
   }
 };
 
@@ -24,9 +34,17 @@ const mutations = {
   },
   setLyrics(state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics);
+    Vue.set(state, 'activeLyricResult', 0);
   },
   setAllLyricResults(state, { results }) {
     Vue.set(state, 'results', results);
+  },
+  nextActiveLyricResult(state) {
+    let newIndex = 0;
+    if (state.activeLyricResult < state.results.length) {
+      newIndex = state.activeLyricResult++;
+    }
+    Vue.set(state, 'activeLyricResult', newIndex);
   }
 };
 
@@ -103,6 +121,7 @@ const actions = {
 
 export default new Vuex.Store({
   state,
+  getters,
   mutations,
   actions
 });
