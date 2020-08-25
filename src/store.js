@@ -7,6 +7,7 @@ Vue.use(Vuex);
 const state = {
   song: null,
   lyrics: null,
+  results: [],
   settings: {
     scrollLyrics: true,
     autoRefresh: true
@@ -23,6 +24,9 @@ const mutations = {
   },
   setLyrics(state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics);
+  },
+  setAllLyricResults(state, { results }) {
+    Vue.set(state, 'results', results);
   }
 };
 
@@ -72,10 +76,10 @@ const actions = {
     });
     return axios
       .get(`/api/getLyrics?query=${query}`)
-      .then((trackData) => {
-        const data = trackData.data;
-        // const album = data.album
-        const lyrics = data.lyrics;
+      .then((results) => {
+        const trackData = results.data;
+        const firstResult = trackData[0];
+        const lyrics = firstResult.lyrics;
 
         if (!lyrics) {
           throw new Error();
@@ -83,6 +87,10 @@ const actions = {
 
         commit('setLyrics', {
           lyrics
+        });
+
+        commit('setAllLyricResults', {
+          results: results.data
         });
       })
       .catch(() => {
