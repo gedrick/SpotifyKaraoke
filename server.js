@@ -100,13 +100,17 @@ server.get('/api/getLyrics', (req, res) => {
   lyricist
     .search(req.query.query)
     .then((results) => {
-      const trackId = results[0].id;
-      return lyricist.song(trackId, { fetchLyrics: true, textFormat: 'html' });
-    })
-    .then((song) => {
-      res.status(200).json({
-        album: song.album,
-        lyrics: song.lyrics
+      const lyricRequests = [];
+      results.slice(0, 2).forEach((result) => {
+        lyricRequests.push(lyricist.song(result.id, { fetchLyrics: true, textFormat: 'html' }));
+      });
+
+      Promise.all(lyricRequests).then((results) => {
+        console.log(JSON.stringify(results));
+
+        res.status(200).json({
+          tracks: results
+        });
       });
     })
     .catch((error) => {

@@ -21,8 +21,8 @@ const mutations = {
   setSong(state, { song }) {
     Vue.set(state, 'song', song);
   },
-  setLyrics(state, { lyrics }) {
-    Vue.set(state, 'lyrics', lyrics);
+  setLyrics(state, data) {
+    Vue.set(state, 'lyrics', data);
   }
 };
 
@@ -73,19 +73,23 @@ const actions = {
     return axios
       .get(`/api/getLyrics?query=${query}`)
       .then((trackData) => {
-        const data = trackData.data;
-        // const album = data.album
-        const lyrics = data.lyrics;
+        console.log(trackData);
 
-        if (!lyrics) {
-          throw new Error();
-        }
+        const data = trackData.data;
+        // // const album = data.album
+        // const lyrics = data.lyrics;
+
+        // if (!lyrics) {
+        //   throw new Error();
+        // }
 
         commit('setLyrics', {
-          lyrics
+          data
         });
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('failed', e);
+
         commit('setLyrics', {
           lyrics: null
         });
