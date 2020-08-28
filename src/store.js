@@ -5,6 +5,7 @@ import axios from 'axios';
 Vue.use(Vuex);
 
 const state = {
+  hideInterface: false,
   song: null,
   lyrics: null,
   results: [],
@@ -25,6 +26,9 @@ const getters = {
 };
 
 const mutations = {
+  toggleInterface(state) {
+    state.hideInterface = !state.hideInterface;
+  },
   toggleSetting(state, key) {
     const value = state.settings[key];
     Vue.set(state.settings, key, !value);

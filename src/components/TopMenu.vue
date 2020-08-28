@@ -1,5 +1,5 @@
 <template>
-  <div class="top-menu">
+  <div class="top-menu" :class="{hidden: hideInterface}">
     <ul>
       <li v-if="isLoggedIn">
         <a @click="showModal('settings')">Settings</a>
@@ -190,7 +190,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['settings', 'results', 'activeLyricResult']),
+    ...mapState(['settings', 'results', 'activeLyricResult', 'hideInterface']),
     isLoggedIn() {
       return this.$cookies.get('loggedIn');
     }
@@ -277,6 +277,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  opacity: 1;
+  transition-property: opacity;
+  transition-duration: 0.5s;
+  &.hidden {
+    opacity: 0;
+  }
 }
 
 ul {

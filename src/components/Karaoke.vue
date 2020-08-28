@@ -1,5 +1,5 @@
 <template>
-  <div class="karaoke" v-if="song && song.isPlaying">
+  <div class="karaoke" v-if="song && song.isPlaying" @click="toggleInterface">
     <div class="gradient top"></div>
     <div
       v-if="lyrics && !songHasNoLyrics"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Karaoke',
@@ -43,6 +43,9 @@ export default {
       }
       return false;
     }
+  },
+  methods: {
+    ...mapMutations(['toggleInterface'])
   }
 };
 </script>
