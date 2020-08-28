@@ -106,10 +106,8 @@ export default {
       }, interval);
     },
     scrollLyricsToPosition() {
-      // Enhance this to smooth out the scrolling.
       const pos = this.$refs.lyricContainer.scrollTop;
       const adjustment = this.calculateScrollAdjustment();
-      // console.log('pos=', pos, 'adjustment=', adjustment);
       this.$refs.lyricContainer.scrollTop = pos + adjustment;
     },
     calculateScrollAdjustment() {
@@ -120,8 +118,7 @@ export default {
 
       const secondsInSong = this.song.duration / 1000;
       const pixelsPerSecond = Math.ceil(totalLyricHeight / secondsInSong);
-
-      const finalAdjustment = pixelsPerSecond * 2; // runs every two seconds
+      const finalAdjustment = pixelsPerSecond * 4; // runs every two seconds
       return finalAdjustment;
     }
   },
@@ -165,6 +162,7 @@ export default {
 
           trackName = trackName.replace(/remaster(?:ed)? \d{2,4}/i, '');
           trackName = trackName.replace(/\d{2,4} remaster(?:ed)?/i, '');
+          trackName = trackName.replace(/remaster(?:ed)?/i, '');
 
           this.getLyrics({
             query: `${this.song.artist} ${trackName}`
