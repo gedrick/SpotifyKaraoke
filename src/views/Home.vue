@@ -21,6 +21,8 @@
     </div>
     <div
       v-if="!fetchingLyrics && song && song.isPlaying"
+      @touchstart="handleLyricDrag"
+      @touchend="handleLyricDrag"
       ref="lyricContainer"
       class="home__lyrics">
       <Karaoke />
@@ -49,8 +51,10 @@ export default {
       idleThreshold: 30,
       idleMode: false,
 
+      positionModifier: 0,
       notListening: true,
-      fetchingLyrics: false
+      fetchingLyrics: false,
+      userIsDraggingLyrics: false
     };
   },
   computed: {
@@ -71,6 +75,9 @@ export default {
   methods: {
     ...mapMutations(['setUser']),
     ...mapActions(['getCurrentSong', 'getLyrics']),
+    handleLyricDrag(event) {
+      this.userIsDraggingLyrics = event.type === 'touchstart';
+    },
     startInterval(interval) {
       window.clearInterval(this.queryTimer);
       this.queryTimer = setInterval(async () => {
@@ -82,7 +89,11 @@ export default {
               this.idleMode = true;
               window.clearInterval(this.queryTimer);
             }
-          } else if (this.settings.scrollLyrics && this.$refs.lyricContainer) {
+          } else if (
+            this.settings.scrollLyrics &&
+            this.$refs.lyricContainer &&
+            !this.userIsDraggingLyrics
+          ) {
             const box = this.$refs.lyricContainer;
             // Remove the upper padding.
             const totalHeight = box.scrollHeight * 0.7;
