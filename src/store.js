@@ -92,30 +92,36 @@ const actions = {
     commit('setLyrics', {
       lyrics: ''
     });
-    return axios
-      .get(`/api/getLyrics?query=${query}`)
-      .then((results) => {
-        const trackData = results.data;
-        const firstResult = trackData[0];
-        const lyrics = firstResult.lyrics;
 
-        if (!lyrics) {
-          throw new Error();
-        }
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`/api/getLyrics?query=${query}`)
+        .then((results) => {
+          const trackData = results.data;
+          const firstResult = trackData[0];
+          const lyrics = firstResult.lyrics;
 
-        commit('setLyrics', {
-          lyrics
-        });
+          if (!lyrics) {
+            throw new Error();
+          }
 
-        commit('setAllLyricResults', {
-          results: results.data
+          commit('setLyrics', {
+            lyrics
+          });
+
+          commit('setAllLyricResults', {
+            results: results.data
+          });
+
+          resolve();
+        })
+        .catch((error) => {
+          commit('setLyrics', {
+            lyrics: null
+          });
+          reject(error);
         });
-      })
-      .catch(() => {
-        commit('setLyrics', {
-          lyrics: null
-        });
-      });
+    });
   }
 };
 
