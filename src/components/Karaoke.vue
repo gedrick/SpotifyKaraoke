@@ -51,16 +51,14 @@ export default {
 @import "@/styles/variables.scss";
 
 .karaoke {
-  padding-top: 30vh;
+  padding: 30vh 0;
   z-index: 4;
 
   &__lyrics {
     font-size: 20px;
-    padding: 20px;
     margin-bottom: 30px;
 
     @media (min-width: 650px) {
-      padding: 20px 0 460px 0;
       font-size: 40px;
     }
   }
