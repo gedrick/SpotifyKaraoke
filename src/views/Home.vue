@@ -94,20 +94,35 @@ export default {
             this.$refs.lyricContainer &&
             !this.userIsDraggingLyrics
           ) {
-            const box = this.$refs.lyricContainer;
-            // Remove the upper padding.
-            const totalHeight = box.scrollHeight * 0.7;
-            const newPosition = Math.round(
-              totalHeight * (this.songPercentage / 100)
-            );
-            this.scrollLyricsToPosition(newPosition);
+            // const box = this.$refs.lyricContainer;
+            // // Remove the upper padding.
+            // const totalHeight = box.scrollHeight * 0.7;
+            // const newPosition = Math.round(
+            //   totalHeight * (this.songPercentage / 100)
+            // );
+            this.scrollLyricsToPosition();
           }
         }
       }, interval);
     },
-    scrollLyricsToPosition(position) {
+    scrollLyricsToPosition() {
       // Enhance this to smooth out the scrolling.
-      this.$refs.lyricContainer.scrollTop = position;
+      const pos = this.$refs.lyricContainer.scrollTop;
+      const adjustment = this.calculateScrollAdjustment();
+      // console.log('pos=', pos, 'adjustment=', adjustment);
+      this.$refs.lyricContainer.scrollTop = pos + adjustment;
+    },
+    calculateScrollAdjustment() {
+      const lyricsBox = this.$refs.lyricContainer;
+      const heightOfLyrics = lyricsBox.offsetHeight;
+      const heightOfLyricPadding = window.innerHeight * 0.4; // 30vh up and down
+      const totalLyricHeight = heightOfLyrics - heightOfLyricPadding;
+
+      const secondsInSong = this.song.duration / 1000;
+      const pixelsPerSecond = Math.ceil(totalLyricHeight / secondsInSong);
+
+      const finalAdjustment = pixelsPerSecond * 2; // runs every two seconds
+      return finalAdjustment;
     }
   },
   mounted() {
@@ -122,7 +137,7 @@ export default {
   watch: {
     song: {
       immediate: true,
-      handler: function(value) {
+      handler: async function(value) {
         if (!value) {
           this.notListening = true;
           this.startInterval(2000);
@@ -153,10 +168,9 @@ export default {
 
           this.getLyrics({
             query: `${this.song.artist} ${trackName}`
-          })
-            .then(() => {
-              this.fetchingLyrics = false;
-            });
+          }).then(() => {
+            this.fetchingLyrics = false;
+          });
         }
       }
     }
