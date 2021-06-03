@@ -28,13 +28,6 @@ const mutations = {
   setLyrics(state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics);
     Vue.set(state, 'activeLyricResult', 0);
-  },
-  nextActiveLyricResult(state) {
-    let newIndex = 0;
-    if (state.activeLyricResult + 1 < state.results.length) {
-      newIndex = state.activeLyricResult + 1;
-    }
-    Vue.set(state, 'activeLyricResult', newIndex);
   }
 };
 
