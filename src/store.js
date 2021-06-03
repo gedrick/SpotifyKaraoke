@@ -33,14 +33,14 @@ const mutations = {
 
 const actions = {
   seekToPosition({}, { position }) {
-    axios.get(`/api/seek?position=${position}`);
+    return axios.get(`/api/seek?position=${position}`);
   },
 
   getCurrentSong({ commit }) {
     return new Promise((resolve, reject) => {
       axios
         .get('/api/getCurrentSong')
-        .then((response) => {
+        .then(response => {
           const data = response.data;
 
           if (data.err) {
@@ -84,7 +84,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios
         .get(`/api/getLyrics?artist=${artist}&title=${title}`)
-        .then((results) => {
+        .then(results => {
           const lyrics = results.data.lyrics;
 
           if (!lyrics) {
@@ -97,7 +97,7 @@ const actions = {
 
           resolve();
         })
-        .catch((error) => {
+        .catch(error => {
           commit('setLyrics', {
             lyrics: null
           });

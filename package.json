@@ -32,6 +32,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^5.0.0",
     "lint-staged": "^8.1.4",
     "node-sass": "^4.9.0",
@@ -47,10 +48,15 @@
       "plugin:vue/essential",
       "@vue/standard"
     ],
-    "rules": {},
+    "rules": {
+      "arrowParens": "as-needed"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
+  },
+  "prettier": {
+    "arrowParens": "avoid"
   },
   "postcss": {
     "plugins": {

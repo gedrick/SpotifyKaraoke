@@ -1,7 +1,7 @@
 <template>
   <div
     class="progress-bar"
-    :class="{hovered: isHovered}"
+    :class="{ hovered: isHovered }"
     v-if="song && song.isPlaying"
     @mousemove="onMouseMove"
     @mouseenter="isHovered = true"
@@ -12,7 +12,8 @@
     <div
       v-if="settings.autoRefresh"
       class="progress-bar__progress"
-      :style="{ width: isHovered ? `${hoverSpace}px` : progress + '%'}">
+      :style="{ width: isHovered ? `${hoverSpace}px` : progress + '%' }"
+    >
       &nbsp;
     </div>
   </div>
@@ -37,12 +38,13 @@ export default {
     onMouseMove(event) {
       this.hoverSpace = event.clientX;
     },
-    progressBarClicked(event) {
+    async progressBarClicked(event) {
       const fullWidth = window.innerWidth;
       const clickPosition = event.clientX;
       const percentage = clickPosition / fullWidth;
       const position = Math.round(this.song.duration * percentage);
-      this.seekToPosition({ position });
+      await this.seekToPosition({ position });
+      this.onMouseLeave();
     }
   },
   computed: {
@@ -61,7 +63,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import '@/styles/variables.scss';
 
 .progress-bar {
   position: fixed;
@@ -105,7 +107,7 @@ export default {
     background-color: $green;
 
     .hovered & {
-      background-color: #1DB95457;
+      background-color: #1db95457;
     }
   }
 }
