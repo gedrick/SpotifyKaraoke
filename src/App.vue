@@ -29,7 +29,6 @@ a, a:visited {
 }
 
 h1 {
-  font-family: 'Bungee';
   font-size: 60px;
   margin-bottom: 0;
   color: $white;
