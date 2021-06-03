@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'Karaoke',
@@ -27,17 +27,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['currentLyrics']),
-    ...mapState(['song', 'results', 'lyrics', 'activeLyricResult']),
+    ...mapState(['song', 'lyrics']),
     parsedLyrics() {
-      if (this.currentLyrics) {
-        return this.currentLyrics.replace(/\n/g, '<br>');
+      if (this.lyrics) {
+        return this.lyrics.replace(/\n/g, '<br>');
       }
       return false;
     },
     songHasNoLyrics() {
       if (this.song.isPlaying && this.song.duration > 0) {
-        if (!this.currentLyrics) {
+        if (!this.lyrics) {
           return true;
         }
       }

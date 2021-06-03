@@ -4,6 +4,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const bodyParser = require('body-parser');
+const lyricsFinder = require('lyrics-finder');
 const isProd = process.env.NODE_ENV === 'production';
 
 let settings = {};
@@ -91,30 +92,20 @@ passport.deserializeUser(function(user, done) {
 
 // Set up routes which are caught from the requests/callback at Login.vue
 // and after signing into spotify.
-
-// Spotify / musixmatch stuff.
-const Lyricist = require('lyricist');
-const lyricist = new Lyricist(settings.genius.token);
-server.get('/api/getLyrics', (req, res) => {
+server.get('/api/getLyrics', async (req, res) => {
   console.log(`Lyrics search: ${req.query.query}...`);
-  lyricist
-    .search(req.query.query)
-    .then((results) => {
-      console.log(`${results.length} results found for ${req.query.query}`);
-      const resultPromises = [];
-      results.slice(0, 5).forEach((result) => {
-        resultPromises.push(lyricist.song(result.id, { fetchLyrics: true, textFormat: 'html' }));
-      });
-      return Promise.all(resultPromises);
-    })
-    .then((results) => {
-      res.status(200).json(
-        results
-      );
-    })
-    .catch((error) => {
-      res.status(500).json({ error });
+  const artist = req.query.artist;
+  const title = req.query.title;
+
+  try {
+    const lyrics = await lyricsFinder(artist, title) || null;
+    console.log(lyrics);
+    res.status(200).json({
+      lyrics
     });
+  } catch (e) {
+    console.log(`Error occurred while searching: ${e}`);
+  }
 });
 
 server.get('/api/getCurrentSong', (req, res) => {

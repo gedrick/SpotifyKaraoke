@@ -8,20 +8,9 @@ const state = {
   hideInterface: false,
   song: null,
   lyrics: null,
-  results: [],
   settings: {
     scrollLyrics: true,
     autoRefresh: true
-  },
-  activeLyricResult: 0
-};
-
-const getters = {
-  currentLyrics(state) {
-    if (state.results.length) {
-      return state.results[state.activeLyricResult].lyrics || 0;
-    }
-    return false;
   }
 };
 
@@ -39,9 +28,6 @@ const mutations = {
   setLyrics(state, { lyrics }) {
     Vue.set(state, 'lyrics', lyrics);
     Vue.set(state, 'activeLyricResult', 0);
-  },
-  setAllLyricResults(state, { results }) {
-    Vue.set(state, 'results', results);
   },
   nextActiveLyricResult(state) {
     let newIndex = 0;
@@ -92,29 +78,23 @@ const actions = {
         });
     });
   },
-  getLyrics({ commit }, { query }) {
+  getLyrics({ commit }, { artist, title }) {
     commit('setLyrics', {
       lyrics: ''
     });
 
     return new Promise((resolve, reject) => {
       axios
-        .get(`/api/getLyrics?query=${query}`)
+        .get(`/api/getLyrics?artist=${artist}&title=${title}`)
         .then((results) => {
-          const trackData = results.data;
-          const firstResult = trackData[0];
-          const lyrics = firstResult.lyrics;
+          const lyrics = results.data.lyrics;
 
           if (!lyrics) {
-            throw new Error();
+            throw new Error('No lyrics found');
           }
 
           commit('setLyrics', {
             lyrics
-          });
-
-          commit('setAllLyricResults', {
-            results: results.data
           });
 
           resolve();
@@ -131,7 +111,6 @@ const actions = {
 
 export default new Vuex.Store({
   state,
-  getters,
   mutations,
   actions
 });

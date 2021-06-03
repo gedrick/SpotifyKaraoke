@@ -35,15 +35,6 @@
         <input type="checkbox" v-model="settings.scrollLyrics" />Autoscroll
       </span>
     </button>
-    <button
-      v-if="isLoggedIn && results.length > 1"
-      class="action more-results"
-      @click="nextActiveLyricResult()"
-    >
-      <span>
-        More ({{activeLyricResult + 1}}/{{results.length}})
-      </span>
-    </button>
     <div class="modal-container" :class="{hidden: modal === ''}">
       <div class="modal about" :class="{visible: modal === 'about'}">
         <div class="modal-close" @click="showModal()">x</div>
@@ -196,7 +187,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['toggleSetting', 'nextActiveLyricResult']),
+    ...mapMutations(['toggleSetting']),
     showModal(modalName) {
       this.modal = modalName || '';
     }
