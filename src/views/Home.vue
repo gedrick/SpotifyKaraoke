@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <TopMenu />
-    <div v-if="!song && notListening" class="home__not-listening">
+    <Sorry />
+    <!-- <TopMenu /> -->
+    <!-- <div v-if="!song && notListening" class="home__not-listening">
       You're signed in to Spotify, but not listening to anything.
       <br />
       <br />Start
@@ -27,12 +28,14 @@
       class="home__lyrics">
       <Karaoke />
       <ProgressBar />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
 import TopMenu from '@/components/TopMenu.vue';
+import Sorry from '@/components/Sorry.vue';
 import Karaoke from '@/components/Karaoke.vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 import { mapMutations, mapState, mapActions } from 'vuex';
@@ -42,7 +45,8 @@ export default {
   components: {
     TopMenu,
     Karaoke,
-    ProgressBar
+    ProgressBar,
+    Sorry
   },
   data() {
     return {
@@ -126,53 +130,53 @@ export default {
     if (!this.isLoggedIn) {
       this.$router.push({ path: 'login' });
     }
-    this.startInterval(2000);
+    // this.startInterval(2000);  //re-enable me!
   },
   beforeDestroy() {
     window.clearTimeout(this.queryTimer);
   },
-  watch: {
-    song: {
-      immediate: true,
-      handler: async function(value) {
-        if (!value) {
-          this.notListening = true;
-          this.startInterval(2000);
-          this.fetchingLyrics = false;
-        } else if (
-          this.idleMode ||
-          (
-            value.artist &&
-            value.trackName &&
-            (value.artist !== this.artist || value.trackName !== this.trackName)
-          )
-        ) {
-          // Reset all the idle counters.
-          this.idleMode = false;
-          this.idleCounter = 0;
-          this.startInterval(2000);
+  // watch: {
+  //   song: {
+  //     immediate: true,
+  //     handler: async function(value) {
+  //       if (!value) {
+  //         this.notListening = true;
+  //         this.startInterval(2000);
+  //         this.fetchingLyrics = false;
+  //       } else if (
+  //         this.idleMode ||
+  //         (
+  //           value.artist &&
+  //           value.trackName &&
+  //           (value.artist !== this.artist || value.trackName !== this.trackName)
+  //         )
+  //       ) {
+  //         // Reset all the idle counters.
+  //         this.idleMode = false;
+  //         this.idleCounter = 0;
+  //         this.startInterval(2000);
 
-          this.notListening = false;
+  //         this.notListening = false;
 
-          this.artist = value.artist;
-          this.trackName = value.trackName;
+  //         this.artist = value.artist;
+  //         this.trackName = value.trackName;
 
-          this.fetchingLyrics = true;
-          let trackName = this.song.trackName;
+  //         this.fetchingLyrics = true;
+  //         let trackName = this.song.trackName;
 
-          trackName = trackName.replace(/remaster(?:ed)? \d{2,4}/i, '');
-          trackName = trackName.replace(/\d{2,4} remaster(?:ed)?/i, '');
-          trackName = trackName.replace(/remaster(?:ed)?/i, '');
+  //         trackName = trackName.replace(/remaster(?:ed)? \d{2,4}/i, '');
+  //         trackName = trackName.replace(/\d{2,4} remaster(?:ed)?/i, '');
+  //         trackName = trackName.replace(/remaster(?:ed)?/i, '');
 
-          this.getLyrics({
-            query: `${this.song.artist} ${trackName}`
-          }).then(() => {
-            this.fetchingLyrics = false;
-          });
-        }
-      }
-    }
-  }
+  //         this.getLyrics({
+  //           query: `${this.song.artist} ${trackName}`
+  //         }).then(() => {
+  //           this.fetchingLyrics = false;
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 };
 </script>
 
