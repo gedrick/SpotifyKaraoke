@@ -1,14 +1,18 @@
 <template>
   <div
     class="progress-bar"
+    :class="{hovered: isHovered}"
     v-if="song && song.isPlaying"
+    @mousemove="onMouseMove"
+    @mouseenter="isHovered = true"
+    @mouseleave="onMouseLeave"
     @click="progressBarClicked"
   >
     <div class="progress-bar__title">{{ title }}</div>
     <div
       v-if="settings.autoRefresh"
       class="progress-bar__progress"
-      :style="{ width: progress + '%'}">
+      :style="{ width: isHovered ? `${hoverSpace}px` : progress + '%'}">
       &nbsp;
     </div>
   </div>
@@ -18,8 +22,21 @@
 import { mapActions, mapState } from 'vuex';
 
 export default {
+  data() {
+    return {
+      hoverSpace: 0,
+      isHovered: false
+    };
+  },
   methods: {
     ...mapActions(['seekToPosition']),
+    onMouseLeave() {
+      this.isHovered = false;
+      this.hoverSpace = 0;
+    },
+    onMouseMove(event) {
+      this.hoverSpace = event.clientX;
+    },
     progressBarClicked(event) {
       const fullWidth = window.innerWidth;
       const clickPosition = event.clientX;
@@ -86,6 +103,10 @@ export default {
     height: 100%;
     width: 55%;
     background-color: $green;
+
+    .hovered & {
+      background-color: #1DB95457;
+    }
   }
 }
 </style>

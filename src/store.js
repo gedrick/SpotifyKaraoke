@@ -32,7 +32,7 @@ const mutations = {
 };
 
 const actions = {
-  seekToPosition({ commit }, { position }) {
+  seekToPosition({}, { position }) {
     axios.get(`/api/seek?position=${position}`);
   },
 

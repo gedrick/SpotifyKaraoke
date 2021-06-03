@@ -121,17 +121,19 @@ server.get('/api/seek', (req, res) => {
     spotifyApi
       .seek(seekMs)
       .then(() => {
-        res.status(200);
+        console.log(`User seeked to ${seekMs}ms`);
+        res.status(200).send({ result: 'success' });
       })
       .catch((err) => {
-        console.log('error seeking:', err);
-        // if ([400, 401, 403].includes(err.statusCode)) {
-        //   res.status(403);
-        // }
-        res.status(403)
+        console.log('Error seeking:', err);
+        if ([401, 403].includes(err.statusCode)) {
+          res.redirect(`${host}/auth/spotify`);
+        } else {
+          res.status(err.statusCode).send({ error: err.statusCode });
+        }
       });
   } else {
-    res.status(200).send({ error: 'No access token' });
+    res.status(401).send({ error: 'No access token' });
   }
 });
 
@@ -155,7 +157,7 @@ server.get('/api/getCurrentSong', (req, res) => {
         }
       });
   } else {
-    res.status(200).send({ error: 'No access token' });
+    res.status(401).send({ error: 'No access token' });
   }
 });
 
@@ -201,7 +203,6 @@ server.get(
     res.redirect(`${host}`);
   }
 );
-
 server.get('/logout', (req, res) => {
   console.log('Logging out user...');
   req.logout();
@@ -210,7 +211,6 @@ server.get('/logout', (req, res) => {
   res.clearCookie('user.refresh');
   res.redirect(`${host}`);
 });
-
 
 // Start the server.
 const port = process.env.PORT || 3000;
