@@ -1,7 +1,7 @@
 const spotify = {
   clientId: process.env.SPOTIFY_CLIENT_ID,
   secret: process.env.SPOTIFY_SECRET,
-  scopes: ['user-read-playback-state']
+  scopes: ['user-read-playback-state', 'user-modify-playback-state']
 };
 
 const login = {

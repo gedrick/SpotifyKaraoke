@@ -1,7 +1,7 @@
 const spotify = {
   clientId: "[your-spotify-app-clientid]",
   secret: "[your-spotify-secret]",
-  scopes: ["user-read-playback-state"]
+  scopes: ["user-read-playback-state", "user-modify-playback-state"]
 };
 
 const login = {

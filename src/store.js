@@ -32,6 +32,10 @@ const mutations = {
 };
 
 const actions = {
+  seekToPosition({ commit }, { position }) {
+    axios.get(`/api/seek?position=${position}`);
+  },
+
   getCurrentSong({ commit }) {
     return new Promise((resolve, reject) => {
       axios
@@ -71,6 +75,7 @@ const actions = {
         });
     });
   },
+
   getLyrics({ commit }, { artist, title }) {
     commit('setLyrics', {
       lyrics: ''

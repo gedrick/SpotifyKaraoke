@@ -1,5 +1,9 @@
 <template>
-  <div class="progress-bar" v-if="song && song.isPlaying">
+  <div
+    class="progress-bar"
+    v-if="song && song.isPlaying"
+    @click="progressBarClicked"
+  >
     <div class="progress-bar__title">{{ title }}</div>
     <div
       v-if="settings.autoRefresh"
@@ -11,9 +15,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
+  methods: {
+    ...mapActions(['seekToPosition']),
+    progressBarClicked(event) {
+      const fullWidth = window.innerWidth;
+      const clickPosition = event.clientX;
+      const percentage = clickPosition / fullWidth;
+      const position = Math.round(this.song.duration * percentage);
+      this.seekToPosition({ position });
+    }
+  },
   computed: {
     ...mapState(['song', 'settings']),
     progress() {
@@ -37,6 +51,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+  cursor: pointer;
 
   width: 100%;
   height: 70px;
@@ -49,6 +64,7 @@ export default {
   background-color: rgba(41, 125, 41, 0.2);
 
   &__title {
+    pointer-events: none;
     z-index: 5;
     color: $white;
     font-weight: bold;
@@ -62,6 +78,7 @@ export default {
   }
 
   &__progress {
+    pointer-events: none;
     position: absolute;
     z-index: 4;
     transition-property: width;

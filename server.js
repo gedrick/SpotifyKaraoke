@@ -93,18 +93,45 @@ passport.deserializeUser(function(user, done) {
 // Set up routes which are caught from the requests/callback at Login.vue
 // and after signing into spotify.
 server.get('/api/getLyrics', async (req, res) => {
-  console.log(`Lyrics search: ${req.query.query}...`);
   const artist = req.query.artist;
   const title = req.query.title;
+  console.log(`Lyrics search: ${artist} - ${title}...`);
 
   try {
     const lyrics = await lyricsFinder(artist, title) || null;
-    console.log(lyrics);
     res.status(200).json({
       lyrics
     });
   } catch (e) {
+    res.status(404);
     console.log(`Error occurred while searching: ${e}`);
+  }
+});
+
+server.get('/api/seek', (req, res) => {
+  const cookies = req.cookies;
+  const seekMs = req.query.position;
+  const token = cookies['user.token'];
+  const refresh = cookies['user.refresh'];
+
+  if (token) {
+    spotifyApi.setAccessToken(token);
+    spotifyApi.setRefreshToken(refresh);
+
+    spotifyApi
+      .seek(seekMs)
+      .then(() => {
+        res.status(200);
+      })
+      .catch((err) => {
+        console.log('error seeking:', err);
+        // if ([400, 401, 403].includes(err.statusCode)) {
+        //   res.status(403);
+        // }
+        res.status(403)
+      });
+  } else {
+    res.status(200).send({ error: 'No access token' });
   }
 });
 
