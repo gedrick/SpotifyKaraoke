@@ -98,13 +98,67 @@ server.get('/api/getLyrics', async (req, res) => {
   console.log(`Lyrics search: ${artist} - ${title}...`);
 
   try {
-    const lyrics = await lyricsFinder(artist, title) || null;
+    const lyrics = (await lyricsFinder(artist, title)) || null;
     res.status(200).json({
       lyrics
     });
   } catch (e) {
     res.status(404);
     console.log(`Error occurred while searching: ${e}`);
+  }
+});
+
+server.get('/api/previous', (req, res) => {
+  const cookies = req.cookies;
+  const token = cookies['user.token'];
+  const refresh = cookies['user.refresh'];
+
+  if (token) {
+    spotifyApi.setAccessToken(token);
+    spotifyApi.setRefreshToken(refresh);
+    spotifyApi
+      .skipToPrevious()
+      .then(() => {
+        console.log('User skipped to previous song');
+        res.status(200).send({ result: 'success' });
+      })
+      .catch(err => {
+        console.log('Error skipping to previous track:', err);
+        if ([401, 403].includes(err.statusCode)) {
+          res.redirect(`${host}/auth/spotify`);
+        } else {
+          res.status(err.statusCode).send({ error: err.statusCode });
+        }
+      });
+  } else {
+    res.status(401).send({ error: 'No access token' });
+  }
+});
+
+server.get('/api/next', (req, res) => {
+  const cookies = req.cookies;
+  const token = cookies['user.token'];
+  const refresh = cookies['user.refresh'];
+
+  if (token) {
+    spotifyApi.setAccessToken(token);
+    spotifyApi.setRefreshToken(refresh);
+    spotifyApi
+      .skipToNext()
+      .then(() => {
+        console.log('User skipped to next song');
+        res.status(200).send({ result: 'success' });
+      })
+      .catch(err => {
+        console.log('Error skipping to next track:', err);
+        if ([401, 403].includes(err.statusCode)) {
+          res.redirect(`${host}/auth/spotify`);
+        } else {
+          res.status(err.statusCode).send({ error: err.statusCode });
+        }
+      });
+  } else {
+    res.status(401).send({ error: 'No access token' });
   }
 });
 
@@ -124,7 +178,7 @@ server.get('/api/seek', (req, res) => {
         console.log(`User seeked to ${seekMs}ms`);
         res.status(200).send({ result: 'success' });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('Error seeking:', err);
         if ([401, 403].includes(err.statusCode)) {
           res.redirect(`${host}/auth/spotify`);
@@ -148,10 +202,10 @@ server.get('/api/getCurrentSong', (req, res) => {
 
     spotifyApi
       .getMyCurrentPlayingTrack({})
-      .then((result) => {
+      .then(result => {
         res.status(200).send({ result });
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.statusCode === 401) {
           res.redirect(`${host}/auth/refresh`);
         }
@@ -169,17 +223,19 @@ server.get('/auth/refresh', (req, res) => {
   const refresh = cookies['user.refresh'];
   spotifyApi.setRefreshToken(refresh);
   spotifyApi.refreshAccessToken().then(
-    (data) => {
+    data => {
       console.log('Got new token');
       res.cookie('user.token', data.body['access_token'], {
-        maxAge: 1000*60*60*24*7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true
       });
       res.redirect(`${host}`);
-    }, (err) => {
+    },
+    err => {
       console.log('Error refreshing token, kicking to /logout', err);
       res.redirect(`${host}/logout`);
-    });
+    }
+  );
 });
 server.get(
   '/auth/callback',
@@ -189,15 +245,15 @@ server.get(
   (req, res) => {
     console.log('User logged in...');
     res.cookie('loggedIn', true, {
-      maxAge: 1000*60*60*24*7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: false
     });
     res.cookie('user.token', req.user.accessToken, {
-      maxAge: 1000*60*60*24*7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true
     });
     res.cookie('user.refresh', req.user.refreshToken, {
-      maxAge: 1000*60*60*24*7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true
     });
     res.redirect(`${host}`);

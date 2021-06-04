@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -23,15 +23,18 @@ body {
   height: 100vh;
 }
 
-a, a:visited {
+a,
+a:visited {
   color: $purple;
   text-decoration: none;
 }
 
 h1 {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   font-size: 60px;
   margin-bottom: 0;
   color: $white;
+  overflow: visible;
 }
 
 h3 {

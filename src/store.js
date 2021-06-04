@@ -32,6 +32,14 @@ const mutations = {
 };
 
 const actions = {
+  previous({}) {
+    return axios.get('/api/previous');
+  },
+
+  next({}) {
+    return axios.get('/api/next');
+  },
+
   seekToPosition({}, { position }) {
     return axios.get(`/api/seek?position=${position}`);
   },

@@ -3,15 +3,28 @@
     class="progress-bar"
     :class="{ hovered: isHovered }"
     v-if="song && song.isPlaying"
-    @mousemove="onMouseMove"
     @mouseenter="isHovered = true"
+    @mousemove="onMouseMove"
     @mouseleave="onMouseLeave"
+    @touchstart="isHovered = true"
     @click="progressBarClicked"
   >
-    <div class="progress-bar__title">{{ title }}</div>
+    <div class="control-container">
+      <div
+        class="previous"
+        @click="skipPrevious"
+        @mouseenter="isHovered = false"
+      >
+        <span class="icon icon-to-start"></span>
+      </div>
+      <div class="title">{{ title }}</div>
+      <div class="next" @click="skipNext" @mouseenter="isHovered = false">
+        <span class="icon icon-to-end"></span>
+      </div>
+    </div>
     <div
       v-if="settings.autoRefresh"
-      class="progress-bar__progress"
+      class="progress"
       :style="{ width: isHovered ? `${hoverSpace}px` : progress + '%' }"
     >
       &nbsp;
@@ -30,7 +43,17 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['seekToPosition']),
+    ...mapActions(['seekToPosition', 'previous', 'next']),
+    skipPrevious(event) {
+      this.isHovered = false;
+      event.stopPropagation();
+      this.previous();
+    },
+    skipNext(event) {
+      this.isHovered = false;
+      event.stopPropagation();
+      this.next();
+    },
     onMouseLeave() {
       this.isHovered = false;
       this.hoverSpace = 0;
@@ -39,6 +62,9 @@ export default {
       this.hoverSpace = event.clientX;
     },
     async progressBarClicked(event) {
+      if (!this.isHovered) {
+        return;
+      }
       const fullWidth = window.innerWidth;
       const clickPosition = event.clientX;
       const percentage = clickPosition / fullWidth;
@@ -82,33 +108,82 @@ export default {
 
   background-color: rgba(41, 125, 41, 0.2);
 
-  &__title {
+  .title {
     pointer-events: none;
     z-index: 5;
     color: $white;
     font-weight: bold;
     text-align: center;
+    line-height: 1.3;
+    padding: 0 10px;
     font-size: 14px;
-    width: 100%;
+    width: 80%;
+
+    @media (min-width: 450px) {
+      width: 70%;
+    }
 
     @media (min-width: 650px) {
       font-size: 18px;
     }
   }
 
-  &__progress {
+  .control-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+    height: 100%;
+    width: 100%;
+  }
+
+  .previous,
+  .next {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    width: 15%;
+    height: 100%;
+    z-index: 6;
+    color: $white;
+
+    @media (min-width: 450px) {
+      width: 10%;
+    }
+
+    span {
+      text-shadow: 0px 0px 10px black;
+      transition-duration: 0.25s;
+      transition-property: text-shadow;
+      cursor: pointer;
+    }
+
+    &:hover span {
+      text-shadow: 0px 0px 20px black;
+    }
+    &:active span {
+      text-shadow: none;
+    }
+  }
+
+  & .progress {
     pointer-events: none;
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 4;
     transition-property: width;
     transition-duration: 0.2s;
     height: 100%;
-    width: 55%;
     background-color: $green;
+  }
 
-    .hovered & {
-      background-color: #1db95457;
-    }
+  &.hovered .progress {
+    background-color: #1db95457;
+    transition-property: none;
+    transition-duration: 0.2s;
   }
 }
 </style>
