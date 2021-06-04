@@ -96,7 +96,7 @@ const actions = {
           const lyrics = results.data.lyrics;
 
           if (!lyrics) {
-            throw new Error('No lyrics found');
+            reject(new Error('No lyrics found'));
           }
 
           commit('setLyrics', {

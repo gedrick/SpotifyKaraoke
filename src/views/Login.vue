@@ -14,30 +14,23 @@
         </div>
         <div class="signin-info">
           <p>
-            Note: by signing into this site with your Spotify account,
-            we will receive absolutely
-            <i>no</i> personal information. The only permission scope
-            required for this service is
-            <b>
-              <a
-                href="https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state"
-                target="_blank"
-              >user-read-playback-state</a>
-            </b>
-            for the purpose of fetching the song you are currently listening
-            to. For more information, please see the rest of the
+            Note: by signing into this site with your Spotify account, we will
+            receive absolutely
+            <i>no</i> personal information. Click the <b>Privacy</b> link to
+            learn more about the required permissions, or read the
             <a
               href="https://developer.spotify.com/documentation/general/guides/scopes/"
               target="_blank"
-            >Spotify API documentation</a>.
+              >Spotify API documentation</a
+            >.
           </p>
         </div>
       </div>
     </div>
     <div
       class="image"
-      :style="{ backgroundImage: 'url(\'/background-image.png\')' }">
-    </div>
+      :style="{ backgroundImage: 'url(\'/background-image.png\')' }"
+    ></div>
   </div>
 </template>
 
@@ -51,7 +44,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/variables.scss";
+@import '@/styles/variables.scss';
 
 .signin {
   display: flex;
@@ -137,6 +130,7 @@ export default {
 
 h1 {
   text-shadow: 7px 4px 1px black;
+  line-break: auto;
 }
 
 .signin-info {

@@ -1,6 +1,6 @@
 <template>
-  <div class="top-menu" :class="{hidden: hideInterface}">
-    <ul>
+  <div class="top-menu" :class="{ hidden: hideInterface }">
+    <ul class="main-menu">
       <li v-if="isLoggedIn">
         <a @click="showModal('settings')">Settings</a>
       </li>
@@ -28,144 +28,158 @@
     <button
       v-if="isLoggedIn && settings.autoRefresh"
       class="action"
-      :class="{disabled: !settings.scrollLyrics}"
+      :class="{ disabled: !settings.scrollLyrics }"
       @click="toggleSetting('scrollLyrics')"
     >
       <span>
         <input type="checkbox" v-model="settings.scrollLyrics" />Autoscroll
       </span>
     </button>
-    <div class="modal-container" :class="{hidden: modal === ''}">
-      <div class="modal about" :class="{visible: modal === 'about'}">
+    <div class="modal-container" :class="{ hidden: modal === '' }">
+      <div class="modal about" :class="{ visible: modal === 'about' }">
         <div class="modal-close" @click="showModal()">x</div>
         <p>
           Hey there! Thanks for checking out
           <span>SpotifyKaraoke</span>.
         </p>
         <p>
-          This site was born out of necessity - while listening
-          to music, I often wanted to pull up lyrics. Unfortunately,
-          lyric sites are typically packed with ads, malware, and
-          overall aggravating features that took far too much time.
+          This site was born out of necessity - while listening to music, I
+          often wanted to pull up lyrics. Unfortunately, lyric sites are
+          typically packed with ads, malware, and overall aggravating features
+          that took far too much time.
         </p>
         <p>
-          What I wanted was a site that I could bookmark, and pull
-          up at any time to see lyrics to whatever I was listening
-          to at the time. And thus,
+          What I wanted was a site that I could bookmark, and pull up at any
+          time to see lyrics to whatever I was listening to at the time. And
+          thus,
           <span>SpotifyKaraoke</span> was born.
         </p>
         <p>
-          The site is written in Vuejs with Node on the backend. It
-          is open-source. Check out the Github page
-          <a
-            href="https://github.com/gedrick/SpotifyKaraoke"
-            target="_blank"
-          >here</a>. It uses the Spotify API and
-          <a
-            href="https://genius.com/developers"
-            target="_blank"
-          >Genius</a> for fetching
-          the lyrics.
+          The site is written in Vuejs with Node on the backend. It is
+          open-source. Check out the Github page
+          <a href="https://github.com/gedrick/SpotifyKaraoke" target="_blank"
+            >here</a
+          >. It uses the Spotify API and
+          <a href="https://genius.com/developers" target="_blank">Genius</a> for
+          fetching the lyrics.
         </p>
       </div>
-      <div class="modal bookmark" :class="{visible: modal === 'bookmark'}">
+      <div class="modal bookmark" :class="{ visible: modal === 'bookmark' }">
         <div class="modal-close" @click="showModal()">x</div>
         <h4>Adding SpotifyKaraoke to your iOS Home Screen</h4>
         <p>
-          Here's a neat way to get instant lyrics - add it to your
-          home screen. That way, you have one-button access to lyrics
-          for whatever it is you're listening to.
+          Here's a neat way to get instant lyrics - add it to your home screen.
+          That way, you have one-button access to lyrics for whatever it is
+          you're listening to.
         </p>
-        <b>Step 1</b><br>
+        <b>Step 1</b><br />
         <p>
           Open SpotifyKaraoke in Safari.
         </p>
-        <b>Step 2</b><br>
+        <b>Step 2</b><br />
         <p>
-          Click the <i>Share</i> button.<br>
-          <img src="/share.png">
+          Click the <i>Share</i> button.<br />
+          <img src="/share.png" />
         </p>
-        <b>Step 3</b><br>
+        <b>Step 3</b><br />
         <p>
-          Click <i>Add to Home Screen</i>.<br>
-          <img src="/add-to-home.png">
+          Click <i>Add to Home Screen</i>.<br />
+          <img src="/add-to-home.png" />
         </p>
-        <b>Step 4</b><br>
+        <b>Step 4</b><br />
         <p>
-          All done! You now have a one-tap icon to instant lyrics.<br>
-          <img src="/icon.png">
+          All done! You now have a one-tap icon to instant lyrics.<br />
+          <img src="/icon.png" />
         </p>
       </div>
-      <div class="modal privacy" :class="{visible: modal === 'privacy'}">
+      <div class="modal privacy" :class="{ visible: modal === 'privacy' }">
         <div class="modal-close" @click="showModal()">x</div>
-        <h4>tl;dr</h4>
+        <h4>Privacy</h4>
         <p>
-          SpotifyKaraoke is a small utility project specifically built out
-          of need. I can't stand companies selling my data any less than you
-          do, so the minimal amount
-          of information collected is purely for site functionality.
-          SpotifyKaraoke is merely a side project for a full time
-          developer. In fact the whole thing is open source, so if you don't
-          trust that I'm not stealing your identity, feel free to look at
-          <a href="https://github.com/gedrick/SpotifyKaraoke" target="_blank">
-          the source code</a> :)
+          SpotifyKaraoke is a small utility project specifically built out of
+          need. I can't stand companies selling my data any more than you do, so
+          the only information permissions required when you login with Spotify
+          are the following:
         </p>
+        <ul>
+          <li>
+            <b>
+              <a
+                href="https://developer.spotify.com/documentation/general/guides/scopes/#user-read-playback-state"
+                target="_blank"
+                alt="for fetching the song you are listening to"
+                >user-read-playback-state</a
+              >
+            </b>
+            - for fetching your currently playing song and to watch for song
+            changes
+          </li>
+          <li>
+            <b>
+              <a
+                href="https://developer.spotify.com/documentation/general/guides/scopes/#user-modify-playback-state"
+                target="_blank"
+                alt="for seeking and skipping tracks"
+                >user-modify-playback-state (NEW)</a
+              >
+            </b>
+            - for seeking through songs and controlling playback
+          </li>
+        </ul>
         <p>
-          Thanks for reading, and I  truly hope you get as much use out
-          of it as I do!  -Gedrick
+          SpotifyKaraoke is merely the side project of a full time developer. It
+          is also open source, so if you'd like to take a look at the code out
+          of curiousity, or evento contribute, feel free to look at
+          <a href="https://github.com/gedrick/SpotifyKaraoke" target="_blank">
+            the source code</a
+          >.
         </p>
         <h4>Cookie Usage</h4>
         <p>
-          There are three cookies set on SpotifyKaraoke, all of which are
-          used solely for managing your logged-in status:
+          There are three cookies set on SpotifyKaraoke, all of which are used
+          solely for managing your logged-in status:
         </p>
         <p>
-          <b>isLoggedIn:</b> convenience cookie so the app
-          knows you are logged in, so it may forward you to the right
-          page.
+          <b>isLoggedIn:</b> convenience cookie so the app knows you are logged
+          in, so it may forward you to the right page.
         </p>
         <p>
-          <b>user.token:</b> passed back from Spotify (httponly) and used
-          to query Spotify and find your current track.
+          <b>user.token:</b> passed back from Spotify (httponly) and used to
+          query Spotify and find your current track.
         </p>
         <p>
-          <b>user.refresh:</b> passed back from Spotify (httponly) and
-          used to refresh your token in the event that your token times out.
+          <b>user.refresh:</b> passed back from Spotify (httponly) and used to
+          refresh your token in the event that your token times out.
         </p>
         <h4>Tracking</h4>
         <p>
-          A non-invasive tracker is used purely
-          to see how many people are using the site. This is
-          used to determine if it's worth the time of upkeep. The service
-          used is
-          <a
-            href="https://www.goatcounter.com/"
-            target="_blank"
-          >GoatCounter</a> which does not track any personally identifiable
-          information. Read their privacy policy
-          <a
-            href="https://www.goatcounter.com/privacy"
-            target="_blank"
-          >here</a>.
+          A non-invasive tracker is used purely to see how many people are using
+          the site. This is used to determine if it's worth the time of upkeep.
+          The service used is
+          <a href="https://www.goatcounter.com/" target="_blank">GoatCounter</a>
+          which does not track any personally identifiable information. Read
+          their privacy policy
+          <a href="https://www.goatcounter.com/privacy" target="_blank">here</a
+          >.
         </p>
       </div>
-      <div class="modal settings" :class="{visible: modal === 'settings'}">
+      <div class="modal settings" :class="{ visible: modal === 'settings' }">
         <div class="modal-close" @click="showModal()">x</div>
         <p>
           <input
             type="checkbox"
             v-model="settings.autoRefresh"
             name="autoRefresh"
-            id="autoRefresh" />
+            id="autoRefresh"
+          />
           <label for="autoRefresh">&nbsp;Auto-Refresh</label>
-          <br />This will continuously ping Spotify to see what you're
-          listening to. Turning off this feature will disable
-          <b>Karaoke Mode</b> and will
+          <br />This will continuously ping Spotify to see what you're listening
+          to. Turning off this feature will disable <b>Karaoke Mode</b> and will
           prevent SpotifyKaraoke from automatically grabbing lyrics when a new
           song starts to play.
           <br />
-          <br />However, it will show a button to manually update the
-          lyrics to match your current song.
+          <br />However, it will show a button to manually update the lyrics to
+          match your current song.
         </p>
       </div>
     </div>
@@ -196,7 +210,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/variables.scss";
+@import '@/styles/variables.scss';
 
 .modal-container {
   width: 100%;
@@ -277,7 +291,7 @@ export default {
   }
 }
 
-ul {
+.main-menu {
   display: flex;
   flex-direction: row;
   list-style: none;

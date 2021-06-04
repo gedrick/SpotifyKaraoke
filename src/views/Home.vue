@@ -4,9 +4,8 @@
     <div v-if="!song && notListening" class="home__not-listening">
       You're signed in to Spotify, but not listening to anything.
       <br />
-      <br />Start
-      listening on any device - your phone, tablet, or desktop!
-      <br><br>
+      <br />Start listening on any device - your phone, tablet, or desktop!
+      <br /><br />
       <p class="idle-mode" @click="getCurrentSong" v-if="idleMode">
         It looks like you're idle! Click here to wake up SpotifyKaraoke.
       </p>
@@ -16,7 +15,7 @@
       <p>
         for
         <span>{{ song.trackName }}</span> by
-        <span>{{ song.artist}}</span>
+        <span>{{ song.artist }}</span>
       </p>
     </div>
     <div
@@ -24,7 +23,8 @@
       @touchstart="handleLyricDrag"
       @touchend="handleLyricDrag"
       ref="lyricContainer"
-      class="home__lyrics">
+      class="home__lyrics"
+    >
       <Karaoke />
       <ProgressBar />
     </div>
@@ -54,6 +54,7 @@ export default {
       positionModifier: 0,
       notListening: true,
       fetchingLyrics: false,
+      noLyricsFound: false,
       userIsDraggingLyrics: false
     };
   },
@@ -141,11 +142,10 @@ export default {
           this.fetchingLyrics = false;
         } else if (
           this.idleMode ||
-          (
-            value.artist &&
+          (value.artist &&
             value.trackName &&
-            (value.artist !== this.artist || value.trackName !== this.trackName)
-          )
+            (value.artist !== this.artist ||
+              value.trackName !== this.trackName))
         ) {
           // Reset all the idle counters.
           this.idleMode = false;
@@ -158,6 +158,7 @@ export default {
           this.trackName = value.trackName;
 
           this.fetchingLyrics = true;
+          this.noLyricsFound = false;
           let trackName = this.song.trackName;
 
           trackName = trackName.replace(/remaster(?:ed)? \d{2,4}/i, '');
@@ -167,9 +168,13 @@ export default {
           this.getLyrics({
             artist: this.song.artist,
             title: trackName
-          }).then(() => {
-            this.fetchingLyrics = false;
-          });
+          })
+            .then(() => {
+              this.fetchingLyrics = false;
+            })
+            .catch(() => {
+              this.fetchingLyrics = false;
+            });
         }
       }
     }
@@ -178,7 +183,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import '@/styles/variables.scss';
 
 .home {
   width: 100vw;

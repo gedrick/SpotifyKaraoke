@@ -31,10 +31,14 @@ a:visited {
 
 h1 {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  font-size: 60px;
+  font-size: 40px;
   margin-bottom: 0;
   color: $white;
-  overflow: visible;
+  overflow: hidden;
+
+  @media (min-width: 450px) {
+    font-size: 45px;
+  }
 }
 
 h3 {
