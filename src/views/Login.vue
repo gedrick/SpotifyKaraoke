@@ -1,5 +1,6 @@
 <template>
-  <div class="signin">
+  <div class="login">
+    <RotateMe />
     <TopMenu />
     <div class="text">
       <div class="inner">
@@ -35,18 +36,20 @@
 </template>
 
 <script>
+import RotateMe from '@/components/RotateMe.vue';
 import TopMenu from '@/components/TopMenu.vue';
-
 export default {
   components: {
+    RotateMe,
     TopMenu
   }
 };
 </script>
+
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 
-.signin {
+.login {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -130,7 +133,6 @@ export default {
 
 h1 {
   text-shadow: 7px 4px 1px black;
-  line-break: auto;
 }
 
 .signin-info {
