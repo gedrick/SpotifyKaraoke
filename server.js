@@ -95,16 +95,22 @@ passport.deserializeUser(function(user, done) {
 server.get('/api/getLyrics', async (req, res) => {
   const artist = req.query.artist;
   const title = req.query.title;
-  console.log(`Lyrics search: ${artist} - ${title}...`);
 
+  console.log(`Lyrics search: ${artist} - ${title}...`);
   try {
     const lyrics = (await lyricsFinder(artist, title)) || null;
+
+    if (!lyrics) {
+      throw new Error('No lyrics found');
+    }
+
+    console.log('Lyrics found.');
     res.status(200).json({
       lyrics
     });
   } catch (e) {
-    res.status(404);
     console.log(`Error occurred while searching: ${e}`);
+    res.status(404).send();
   }
 });
 
