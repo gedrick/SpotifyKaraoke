@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <TopMenu />
+    <TopMenu :playing="!notListening" />
     <div v-if="!song && notListening" class="home__not-listening">
       You're signed in to Spotify, but not listening to anything.
       <br />

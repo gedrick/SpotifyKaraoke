@@ -2,7 +2,7 @@
   <div class="rotate-me">
     <div class="container">
       <h2>Rotate to portrait mode!</h2>
-      <span class="icon icon-arrows-ccw"></span>
+      <span class="icon icon-cw"></span>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
   background-color: $black;
   justify-content: center;
 
-  @media (hover: none) and (orientation: landscape) {
+  @media (hover: none) and (orientation: portrait) {
     display: flex;
   }
 }

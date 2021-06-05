@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <RotateMe />
     <TopMenu />
     <div class="text">
       <div class="inner">
@@ -36,11 +35,9 @@
 </template>
 
 <script>
-import RotateMe from '@/components/RotateMe.vue';
 import TopMenu from '@/components/TopMenu.vue';
 export default {
   components: {
-    RotateMe,
     TopMenu
   }
 };

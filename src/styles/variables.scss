@@ -2,13 +2,13 @@ $purple: #9a6dc3;
 $white: #ffffff;
 $black: #000000;
 $darkgray: #1a1a1a;
-$green: #1DB954;
+$green: #1db954;
 
 button.action {
   background-color: rgba($green, 0.5);
   border-radius: 0;
   border-style: none;
-  padding: 15px;
+  padding: 5px;
   cursor: pointer;
   transition-duration: 0.3s;
   transition-property: background-color, box-shadow;
